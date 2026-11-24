@@ -405,7 +405,7 @@
     }
     .target-big-number.impossible {
       color: #b45309;
-      font-size: 1.45rem;
+      font-size: 1.18rem;
     }
     .target-subtext {
       font-size: 0.88rem;
@@ -875,7 +875,7 @@
     } else if (neededFinal > 100) {
       targetEl.innerHTML = `
         <div class="target-big-number impossible">${neededFinal.toFixed(1)}% Needed (Above 100%)</div>
-        <div class="target-subtext">Even a 100% on the Final Exam puts you at <strong>${(baseWithoutFinal + 15).toFixed(2)}%</strong>. To reach <strong>${targetLetter} (${target}%)</strong>, focus on raising remaining coursework or bonus points.</div>
+        <div class="target-subtext">Even a 100% on the Cumulative Final Exam puts your maximum possible course percentage at <strong>${(baseWithoutFinal + 15).toFixed(2)}%</strong>, which is below the <strong>${target}% (${targetLetter})</strong> threshold.</div>
       `;
     } else {
       targetEl.innerHTML = `
@@ -914,7 +914,7 @@
         if (reqForNextLetter <= 100) {
           letterNote = `To move up from a letter grade of <strong>${opt2Letter}</strong> to <strong>${nextLetter} (${nextThreshold}%)</strong>, you would need at least <strong>${reqForNextLetter.toFixed(1)}%</strong> on the Cumulative Final Exam.`;
         } else {
-          letterNote = `Note: Even with 100% on the Cumulative Final Exam (which yields ${(baseWithoutFinal + 15).toFixed(2)}%), your overall course percentage would remain below the ${nextThreshold}% cutoff for a letter grade of <strong>${nextLetter}</strong> unless you also raise your coursework or bonus points.`;
+          letterNote = `Note: Even with 100% on the Cumulative Final Exam (which yields ${(baseWithoutFinal + 15).toFixed(2)}%), your overall course percentage would remain below the ${nextThreshold}% cutoff for a letter grade of <strong>${nextLetter}</strong>.`;
         }
       }
 
@@ -938,16 +938,8 @@
       const remainingExp = 4 - explorationCount;
       tips.push({
         type: "warn",
-        title: `${remainingExp} Exploration Bonus${remainingExp > 1 ? "es" : ""} Remaining (Due Dec 9, 11:59 PM)`,
-        body: `You have up to 5 attempts per Exploration in REAL CHEM (Units 1, 4, 6, and 8). Scoring 95% or higher on each remaining Exploration adds +1% to your Unit Checkpoint average (+${(remainingExp * 0.05).toFixed(2)}% to your overall course percentage).`
-      });
-    }
-
-    if (surveyCourseBonus < 1.00) {
-      tips.push({
-        type: "warn",
-        title: `Unclaimed Survey Bonus (+${(1.00 - surveyCourseBonus).toFixed(2)}% Available)`,
-        body: "Completing the Pre-Survey and Post-Survey adds +0.50% each directly onto your overall course percentage."
+        title: `${remainingExp} Exploration Bonus${remainingExp > 1 ? "es" : ""} Unchecked (Due Dec 9, 11:59 PM)`,
+        body: `If you have not yet completed all Explorations in REAL CHEM (Units 1, 4, 6, and 8), scoring 95% or higher within your 5 attempts adds +1% to your Unit Checkpoint average per Exploration (+${(remainingExp * 0.05).toFixed(2)}% to your overall course percentage).`
       });
     }
 
@@ -955,7 +947,7 @@
       tips.push({
         type: "warn",
         title: "High-Leverage Category: Discussion (20% Weight)",
-        body: `Your Discussion score (${disc.toFixed(1)}%) carries the same weight as your highest regular exam (20%). Completing any remaining discussion posts or rubric requirements can substantially raise both Option 1 and Option 2.`
+        body: `Your Discussion score (${disc.toFixed(1)}%) carries the same weight as your highest regular exam (20%). Completing any remaining discussion assignments at a high score will lift both Option 1 and Option 2.`
       });
     }
 
@@ -975,13 +967,13 @@
       const el = document.getElementById(k);
       state[k] = el.type === "checkbox" ? el.checked : el.value;
     });
-    try { localStorage.setItem("chem101_calc_v6", JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem("chem101_calc_v7", JSON.stringify(state)); } catch (e) {}
   }
 
   function loadState() {
     let state = DEFAULTS;
     try {
-      const saved = localStorage.getItem("chem101_calc_v6");
+      const saved = localStorage.getItem("chem101_calc_v7");
       if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
     } catch (e) {}
 
@@ -994,7 +986,7 @@
   }
 
   function resetDefaults() {
-    try { localStorage.removeItem("chem101_calc_v6"); } catch (e) {}
+    try { localStorage.removeItem("chem101_calc_v7"); } catch (e) {}
     loadState();
   }
 
