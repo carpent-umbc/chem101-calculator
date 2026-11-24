@@ -3,465 +3,606 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FA26 CHEM 101 | Final Grade Estimator & Decision Guide</title>
+  <title>FA26 CHEM 101 | Final Grade Estimator</title>
   <style>
     :root {
       --bg: #f4f6f9;
       --card: #ffffff;
-      --border: #dce2ec;
+      --border: #d5dce6;
       --text: #1e293b;
-      --muted: #64748b;
+      --muted: #475569;
       --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
       --primary-soft: #eff6ff;
       --accent: #0f766e;
       --accent-soft: #f0fdfa;
       --warn-bg: #fffbeb;
-      --warn-border: #f59e0b;
-      --warn-text: #92400e;
-      --auto-bg: #f1f5f9;
+      --warn-border: #d97706;
+      --warn-text: #78350f;
+      --err-bg: #fef2f2;
+      --err-border: #dc2626;
+      --err-text: #991b1b;
+      --auto-bg: #f8fafc;
       --radius: 10px;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 20px;
+      padding: 16px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
     }
+
     .container {
       max-width: 1120px;
       margin: 0 auto;
     }
+
     header {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px 24px;
-      margin-bottom: 20px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
     }
+
     header h1 {
       margin: 0 0 4px 0;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       color: #0f172a;
     }
+
     header p {
       margin: 0;
       font-size: 0.9rem;
       color: var(--muted);
     }
+
     .header-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
     }
-    .btn-reset {
-      background: #fff;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 8px 14px;
-      border-radius: 6px;
+
+    button {
+      font-family: inherit;
       cursor: pointer;
+      border-radius: 6px;
       font-size: 0.85rem;
       font-weight: 600;
+      padding: 8px 13px;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
-    .btn-reset:hover { background: #f8fafc; }
-    .btn-clear {
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    summary:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    .btn-example {
       background: var(--primary-soft);
-      border: 1px solid #bfdbfe;
-      color: var(--primary);
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
+      border: 1px solid #93c5fd;
+      color: var(--primary-dark);
     }
-    .btn-clear:hover { background: #dbeafe; }
+
+    .btn-example:hover {
+      background: #dbeafe;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      color: var(--text);
+    }
+
+    .example-banner {
+      display: none;
+      background: var(--warn-bg);
+      border: 2px solid var(--warn-border);
+      color: var(--warn-text);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .example-banner.active {
+      display: flex;
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: 1.3fr 1.05fr;
-      gap: 20px;
+      grid-template-columns: 1.25fr 1.05fr;
+      gap: 18px;
       align-items: start;
     }
+
     @media (max-width: 880px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
     }
+
     .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 10px;
+      margin-bottom: 14px;
     }
+
     .card-header h2 {
       margin: 0;
-      font-size: 1.05rem;
-    }
-    .badge-weight {
-      background: var(--primary-soft);
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 0.8rem;
-      padding: 3px 9px;
-      border-radius: 999px;
-    }
-    details.descriptor {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 9px 12px;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
-      color: #334155;
-    }
-    details.descriptor summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--primary);
-      user-select: none;
-    }
-    details.descriptor p {
-      margin: 8px 0 0 0;
-    }
-    .syllabus-box {
-      background: var(--primary-soft);
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
-      color: #1e3a8a;
-    }
-    .syllabus-box strong.box-title {
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 4px;
-      color: #172554;
-    }
-    .syllabus-box ul {
-      margin: 6px 0 0 0;
-      padding-left: 18px;
-    }
-    .syllabus-box li {
-      margin-bottom: 2px;
-    }
-    .row-item {
-      display: grid;
-      grid-template-columns: 1fr 105px 115px;
-      gap: 10px;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .row-item:last-child { border-bottom: none; }
-    .bb-raw-card {
-      background: #eff6ff;
-      border: 2px solid #3b82f6;
-      border-radius: 8px;
-      padding: 12px 14px;
-      margin: 12px 0;
-      display: grid;
-      grid-template-columns: 1fr 115px;
-      gap: 12px;
-      align-items: center;
-    }
-    .bb-raw-badge {
-      display: inline-block;
-      background: #1d4ed8;
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      padding: 2px 7px;
-      border-radius: 4px;
-      margin-bottom: 4px;
-    }
-    .bb-raw-title {
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 1.08rem;
       color: #0f172a;
-      display: block;
     }
-    .bb-raw-desc {
-      font-size: 0.8rem;
-      color: #1e3a8a;
-      display: block;
-      margin-top: 2px;
-    }
-    .bb-raw-card input[type="number"] {
-      background: #ffffff;
-      border: 2px solid #2563eb;
-      font-size: 1rem;
-      padding: 9px 10px;
-    }
-    .item-label {
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    .item-sub {
-      display: block;
-      font-size: 0.76rem;
+
+    .section-intro {
+      margin: 0 0 12px 0;
+      font-size: 0.88rem;
       color: var(--muted);
     }
-    .item-weight {
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-align: right;
-    }
-    input[type="number"] {
-      width: 100%;
-      padding: 7px 9px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      text-align: right;
-      font-weight: 600;
-    }
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
-    }
-    input.is-auto {
-      background: var(--auto-bg);
-      color: #475569;
-    }
-    .exam-rank-box {
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-top: 12px;
-      font-size: 0.84rem;
-    }
-    .rank-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .pill {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 0.8rem;
-    }
-    .bonus-section-label {
+
+    .sub-group-title {
       font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
       color: var(--muted);
-      margin: 12px 0 6px 0;
+      margin: 14px 0 6px 0;
     }
-    .bonus-grid {
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 125px;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .field-row:last-child {
+      border-bottom: none;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .field-help {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .field-error {
+      display: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--err-text);
+      background: var(--err-bg);
+      border: 1px solid #fecaca;
+      border-radius: 5px;
+      padding: 4px 8px;
+      margin-top: 5px;
+    }
+
+    .field-error.visible {
+      display: block;
+    }
+
+    .raw-exam-box {
+      background: var(--primary-soft);
+      border: 1.5px solid #93c5fd;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 125px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .raw-exam-box .field-label {
+      color: var(--primary-dark);
+    }
+
+    .raw-exam-box .field-help {
+      color: #1e40af;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      text-align: right;
+      font-weight: 600;
+      color: #0f172a;
+      background: #ffffff;
+    }
+
+    input[type="number"].is-estimated {
+      background: var(--auto-bg);
+      border-style: dashed;
+      border-color: #94a3b8;
+      color: #334155;
+    }
+
+    input[type="number"].invalid {
+      border-color: var(--err-border);
+      background: var(--err-bg);
+    }
+
+    .status-pill {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    .status-pill.est {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .status-pill.ovr {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-pill.wait {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .btn-restore {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 3px 8px;
+      font-size: 0.76rem;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--primary);
+    }
+
+    .btn-restore:hover {
+      background: var(--primary-soft);
+    }
+
+    details.panel-details {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #fafbfc;
+      margin-top: 10px;
+    }
+
+    details.panel-details summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--primary-dark);
+    }
+
+    .details-body {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 0.86rem;
+      color: #334155;
+    }
+
+    .details-body ul {
+      margin: 6px 0;
+      padding-left: 18px;
+    }
+
+    .details-body li {
+      margin-bottom: 4px;
+    }
+
+    .bonus-note {
+      background: #f8fafc;
+      border-left: 3px solid #64748b;
+      padding: 8px 12px;
+      font-size: 0.83rem;
+      color: #334155;
+      margin-bottom: 12px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .bonus-list {
       display: grid;
       grid-template-columns: 1fr;
       gap: 8px;
     }
-    .bonus-item {
+
+    .bonus-option {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      gap: 10px;
       background: #f8fafc;
       border: 1px solid var(--border);
-      padding: 8px 12px;
       border-radius: 6px;
-      font-size: 0.86rem;
+      padding: 9px 12px;
       cursor: pointer;
-      gap: 10px;
+      font-size: 0.88rem;
     }
-    .bonus-item input {
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
+
+    .bonus-option:hover {
+      border-color: #94a3b8;
+    }
+
+    .bonus-check-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .bonus-check-wrap input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      margin-top: 2px;
       accent-color: var(--accent);
       flex-shrink: 0;
     }
-    .bonus-left {
-      display: flex;
-      align-items: center;
-    }
-    .bonus-pts {
+
+    .bonus-effect {
       font-weight: 700;
       color: var(--accent);
-      font-size: 0.8rem;
-      text-align: right;
+      font-size: 0.82rem;
       white-space: nowrap;
+      flex-shrink: 0;
     }
+
     .sticky-col {
       position: sticky;
       top: 16px;
     }
-    .options-compare {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .option-box {
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      background: #fff;
-      transition: all 0.2s ease;
-    }
-    .option-box.winner {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-    }
-    .opt-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-    .opt-score {
-      font-size: 1.55rem;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    .opt-letter {
-      display: inline-block;
-      margin-top: 3px;
-      padding: 2px 11px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 0.9rem;
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-    .option-box.winner .opt-letter {
-      background: var(--accent);
-      color: #fff;
+
+    @media (max-width: 880px) {
+      .sticky-col {
+        position: static;
+      }
     }
 
-    /* DOMINANT TARGET FINAL EXAM SOLVER */
-    .target-hero {
-      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-      border: 2px solid #2563eb;
-      border-radius: 10px;
-      padding: 18px;
+    .result-block {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 15px 16px;
       margin-bottom: 14px;
+      background: #ffffff;
     }
-    .target-controls {
+
+    .result-block.primary-result {
+      border-color: #93c5fd;
+      background: #f8fbff;
+    }
+
+    .result-block h3 {
+      margin: 0 0 8px 0;
+      font-size: 0.98rem;
+      color: #0f172a;
+    }
+
+    .empty-prompt {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .grade-readout {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 4px 0 8px 0;
+    }
+
+    .grade-pct {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+
+    .grade-letter-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 1rem;
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .assumptions-notice {
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      margin-top: 6px;
+    }
+
+    .goal-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 12px;
       flex-wrap: wrap;
-    }
-    .target-controls label {
-      font-size: 1.02rem;
-      font-weight: 800;
-      color: #1e3a8a;
-    }
-    select.target-select {
-      padding: 7px 12px;
-      border-radius: 7px;
-      border: 2px solid #2563eb;
-      background: #ffffff;
-      color: #0f172a;
-      font-size: 0.98rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .target-big-display {
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 14px 16px;
-      text-align: center;
-      border: 1px solid #bfdbfe;
-    }
-    .target-big-number {
-      font-size: 2.15rem;
-      font-weight: 900;
-      color: #1d4ed8;
-      line-height: 1.15;
-      margin-bottom: 6px;
-    }
-    .target-big-number.achieved {
-      color: #0f766e;
-      font-size: 1.45rem;
-    }
-    .target-big-number.impossible {
-      color: #b45309;
-      font-size: 1.18rem;
-    }
-    .target-subtext {
-      font-size: 0.88rem;
-      color: #334155;
-      line-height: 1.45;
-    }
-
-    /* COLLAPSIBLE WEIGHTED BREAKDOWN */
-    details.breakdown-toggle {
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-    details.breakdown-toggle summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--muted);
-      user-select: none;
-    }
-    details.breakdown-toggle summary:hover {
-      color: var(--text);
-    }
-    .breakdown-list {
-      margin-top: 8px;
-      padding-top: 6px;
-      border-top: 1px dashed #e2e8f0;
-    }
-    .breakdown-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 3px 0;
-    }
-
-    .guidance-card {
-      background: #f8fafc;
-      border-left: 4px solid var(--primary);
-      padding: 12px 14px;
-      border-radius: 6px;
       margin-bottom: 10px;
-      font-size: 0.88rem;
     }
-    .guidance-card.warn {
-      background: var(--warn-bg);
-      border-left-color: var(--warn-border);
-      color: var(--warn-text);
+
+    .goal-row label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1e293b;
     }
-    .guidance-card strong.tip-title {
+
+    select {
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0f172a;
+      background: #ffffff;
+    }
+
+    .goal-outcome {
+      font-size: 0.9rem;
+      color: #1e293b;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .goal-highlight {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary);
       display: block;
       margin-bottom: 4px;
     }
-    .disclaimer {
-      font-size: 0.78rem;
-      color: var(--muted);
+
+    .goal-highlight.warn {
+      color: var(--warn-text);
+      font-size: 1.05rem;
+    }
+
+    .goal-highlight.ok {
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .hypothetical-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .hypothetical-input-row input[type="number"] {
+      width: 96px;
       text-align: center;
-      margin-top: 10px;
+    }
+
+    .scenario-outcome {
+      font-size: 0.89rem;
+      color: #1e293b;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px dashed #e2e8f0;
+      font-size: 0.84rem;
+    }
+
+    .breakdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .policy-footer {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    .policy-footer a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 540px) {
+      body {
+        padding: 10px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .field-row,
+      .raw-exam-box {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      input[type="number"] {
+        text-align: left;
+      }
+
+      .bonus-option {
+        flex-direction: column;
+        gap: 4px;
+      }
     }
   </style>
 </head>
@@ -469,268 +610,555 @@
 <div class="container">
   <header>
     <div>
-      <h1>FA26 CHEM 101 — Final Grade Estimator & Decision Guide</h1>
-      <p>Enter scores from 0–100. Leave upcoming items blank to auto-estimate from your current category average.</p>
+      <h1>FA26 CHEM 101 — Final Grade Estimator</h1>
+      <p>Estimate your course standing and see how the optional cumulative final exam affects your grade.</p>
     </div>
     <div class="header-actions">
-      <button class="btn-clear" onclick="clearAll()">Clear All Inputs</button>
-      <button class="btn-reset" onclick="resetDefaults()">Reset to Sample Data</button>
+      <button type="button" class="btn-example" id="btnExample" onclick="toggleExampleMode()">View an example</button>
+      <button type="button" class="btn-secondary" onclick="clearInputs()">Clear inputs</button>
     </div>
   </header>
 
+  <div class="example-banner" id="exampleBanner" role="status">
+    <span><strong>Example mode active:</strong> Showing sample numbers so you can see how the estimator works. Your own saved entries are untouched.</span>
+    <button type="button" class="btn-secondary" onclick="exitExampleMode()">Exit example &amp; return to my entries</button>
+  </div>
+
   <div class="grid">
-    <!-- LEFT COLUMN: INPUTS & DESCRIPTORS -->
+    <!-- LEFT COLUMN: THREE CONCISE INPUT SECTIONS -->
     <div>
-      <!-- COURSEWORK -->
-      <div class="card">
+      <!-- SECTION 1: ENTER YOUR BLACKBOARD GRADES -->
+      <section class="card" aria-labelledby="sec1-heading">
         <div class="card-header">
-          <h2>1. Coursework Assignments</h2>
-          <span class="badge-weight">40% of Course Grade</span>
+          <h2 id="sec1-heading">1. Enter your Blackboard grades</h2>
         </div>
-        <details class="descriptor">
-          <summary>How Coursework is Calculated & Where to Find Grades</summary>
-          <p>
-            Coursework makes up 40% of your final grade: <strong>Modules 1–21</strong> (10% total; Module 1–19 is 19/21 = 9.05%, and Modules 20 &amp; 21 are 1/21 = 0.48% each), <strong>Unit Checkpoints 1–8</strong> (5% total, 0.63% each), <strong>Unit Completions 1–8</strong> (5% total, 0.63% each), and <strong>Discussion</strong> (20%).
-          </p>
-          <p>
-            You can find your current <strong>Module 1–19 Completion Avg</strong>, <strong>Unit 1–7 Checkpoint Avg</strong>, and <strong>Discussion</strong> grades directly in your <strong>Blackboard grades</strong>. If you leave upcoming items (Modules 20–21, Checkpoint 8, or Units 7–8) blank, the calculator automatically fills them with your average from the earlier items in that category.
-          </p>
-        </details>
+        <p class="section-intro">Enter all eight current grades from your Blackboard gradebook to calculate your projection.</p>
 
-        <div class="row-item">
-          <div><span class="item-label">Module 1–19 Completion Avg</span><span class="item-sub">19 modules combined (19/21 weight) — found in Blackboard grades</span></div>
-          <div class="item-weight">9.05%</div>
-          <input type="number" id="mod1_19" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Module 20 Completion</span><span class="item-sub" id="hint_mod20"></span></div>
-          <div class="item-weight">0.48%</div>
-          <input type="number" id="mod20" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Module 21 Completion</span><span class="item-sub" id="hint_mod21"></span></div>
-          <div class="item-weight">0.48%</div>
-          <input type="number" id="mod21" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
+        <div class="sub-group-title">Current Coursework Grades</div>
 
-        <div class="row-item">
-          <div><span class="item-label">Unit 1–7 Checkpoint Avg</span><span class="item-sub">Found in Blackboard grades (before Exploration bonus)</span></div>
-          <div class="item-weight">4.38%</div>
-          <input type="number" id="cp1_7" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Unit 8 Checkpoint</span><span class="item-sub" id="hint_cp8"></span></div>
-          <div class="item-weight">0.63%</div>
-          <input type="number" id="cp8" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-
-        <div class="row-item">
-          <div><span class="item-label">Unit 1–6 Completion Avg</span><span class="item-sub">6 unit completions combined</span></div>
-          <div class="item-weight">3.75%</div>
-          <input type="number" id="uc1_6" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Unit 7 Completion</span><span class="item-sub" id="hint_uc7"></span></div>
-          <div class="item-weight">0.63%</div>
-          <input type="number" id="uc7" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Unit 8 Completion</span><span class="item-sub" id="hint_uc8"></span></div>
-          <div class="item-weight">0.63%</div>
-          <input type="number" id="uc8" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-
-        <div class="row-item">
-          <div><span class="item-label">Discussion</span><span class="item-sub">Found in Blackboard grades (high-impact category)</span></div>
-          <div class="item-weight">20.00%</div>
-          <input type="number" id="discussion" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
-        </div>
-      </div>
-
-      <!-- EXAMS -->
-      <div class="card">
-        <div class="card-header">
-          <h2>2. Regular Exams & Cumulative Final</h2>
-          <span class="badge-weight">60% of Course Grade</span>
-        </div>
-        <details class="descriptor">
-          <summary>Why Raw Exam Average Differs from Exams 1–3 (Option 1 vs. Option 2)</summary>
-          <p>
-            Your <strong>Exams 1–3</strong> (which include exam bonus points) are ranked from highest to lowest for 45% of your course grade: <strong>highest = 20%</strong>, <strong>middle = 15%</strong>, and <strong>lowest = 10%</strong>.
-          </p>
-          <p>
-            For the remaining 15%, <strong>Option 1</strong> uses your Cumulative Final Exam score, whereas <strong>Option 2</strong> uses your <strong>Raw Exam Average</strong> (the unweighted average of your raw exam scores <em>without</em> exam bonus points), which is listed directly in your <strong>Blackboard grades</strong>.
-          </p>
-        </details>
-
-        <div class="row-item">
-          <div><span class="item-label">Exam 1 (with exam bonus)</span><span class="item-sub" id="hint_ex1"></span></div>
-          <div class="item-weight">Auto-ranked</div>
-          <input type="number" id="exam1" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Exam 2 (with exam bonus)</span><span class="item-sub" id="hint_ex2"></span></div>
-          <div class="item-weight">Auto-ranked</div>
-          <input type="number" id="exam2" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Exam 3 (with exam bonus)</span><span class="item-sub" id="hint_ex3"></span></div>
-          <div class="item-weight">Auto-ranked</div>
-          <input type="number" id="exam3" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
-        </div>
-
-        <!-- DEDICATED BLACKBOARD RAW EXAM AVERAGE INPUT -->
-        <div class="bb-raw-card">
+        <div class="field-row">
           <div>
-            <span class="bb-raw-badge">Enter from Blackboard Grades • 15% (Option 2)</span>
-            <span class="bb-raw-title">Raw Exam Average</span>
-            <span class="bb-raw-desc" id="hint_raw">Look up "Raw Exam Average" in your Blackboard grades (this excludes exam bonus points and is different from the average of Exams 1–3).</span>
+            <label class="field-label" for="mod1_19">Module 1–19 Completion Avg</label>
+            <span class="field-help" id="help-mod1_19">Enter the percentage shown in Blackboard (0–100).</span>
+            <div class="field-error" id="err-mod1_19" role="alert"></div>
           </div>
+          <input type="number" id="mod1_19" inputmode="decimal" step="0.01" placeholder="e.g., 92.5" aria-describedby="help-mod1_19 err-mod1_19" oninput="handleInputChange('mod1_19')" />
+        </div>
+
+        <div class="field-row">
           <div>
-            <input type="number" id="rawExamAvgInput" min="0" max="100" step="0.01" placeholder="Enter %" oninput="recalc()" />
+            <label class="field-label" for="cp1_7">Unit 1–7 Checkpoint Avg</label>
+            <span class="field-help" id="help-cp1_7">Enter your Blackboard percentage before Exploration bonuses (0–100).</span>
+            <div class="field-error" id="err-cp1_7" role="alert"></div>
           </div>
+          <input type="number" id="cp1_7" inputmode="decimal" step="0.01" placeholder="e.g., 81.0" aria-describedby="help-cp1_7 err-cp1_7" oninput="handleInputChange('cp1_7')" />
         </div>
 
-        <div class="row-item">
-          <div><span class="item-label">Cumulative Final Exam</span><span class="item-sub" id="hint_final"></span></div>
-          <div class="item-weight">15.00% (Opt 1)</div>
-          <input type="number" id="finalExam" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="uc1_6">Unit 1–6 Completion Avg</label>
+            <span class="field-help" id="help-uc1_6">Enter your Unit 1–6 Completion average (0–100).</span>
+            <div class="field-error" id="err-uc1_6" role="alert"></div>
+          </div>
+          <input type="number" id="uc1_6" inputmode="decimal" step="0.01" placeholder="e.g., 90.0" aria-describedby="help-uc1_6 err-uc1_6" oninput="handleInputChange('uc1_6')" />
         </div>
 
-        <div class="exam-rank-box">
-          <strong>Live Exam Ranking (45% Total):</strong>
-          <div class="rank-pills" id="rankPills"></div>
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="discussion">Discussion</label>
+            <span class="field-help" id="help-discussion">Enter your Discussion percentage from Blackboard (0–100).</span>
+            <div class="field-error" id="err-discussion" role="alert"></div>
+          </div>
+          <input type="number" id="discussion" inputmode="decimal" step="0.01" placeholder="e.g., 85.0" aria-describedby="help-discussion err-discussion" oninput="handleInputChange('discussion')" />
         </div>
-      </div>
 
-      <!-- BONUS POINTS -->
-      <div class="card">
+        <div class="sub-group-title">Regular Exams (Bonus-Inclusive) &amp; Raw Exam Average</div>
+
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="exam1">Exam 1</label>
+            <span class="field-help" id="help-exam1">Blackboard score including exam bonus points (0–110).</span>
+            <div class="field-error" id="err-exam1" role="alert"></div>
+          </div>
+          <input type="number" id="exam1" inputmode="decimal" step="0.01" placeholder="e.g., 83.0" aria-describedby="help-exam1 err-exam1" oninput="handleInputChange('exam1')" />
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="exam2">Exam 2</label>
+            <span class="field-help" id="help-exam2">Blackboard score including exam bonus points (0–110).</span>
+            <div class="field-error" id="err-exam2" role="alert"></div>
+          </div>
+          <input type="number" id="exam2" inputmode="decimal" step="0.01" placeholder="e.g., 74.0" aria-describedby="help-exam2 err-exam2" oninput="handleInputChange('exam2')" />
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="exam3">Exam 3</label>
+            <span class="field-help" id="help-exam3">Blackboard score including exam bonus points (0–110).</span>
+            <div class="field-error" id="err-exam3" role="alert"></div>
+          </div>
+          <input type="number" id="exam3" inputmode="decimal" step="0.01" placeholder="e.g., 86.0" aria-describedby="help-exam3 err-exam3" oninput="handleInputChange('exam3')" />
+        </div>
+
+        <div class="raw-exam-box">
+          <div>
+            <label class="field-label" for="rawExamAvg">Raw Exam Average</label>
+            <span class="field-help" id="help-rawExamAvg">Copy “Raw Exam Average” from Blackboard. It excludes exam bonus points.</span>
+            <div class="field-error" id="err-rawExamAvg" role="alert"></div>
+          </div>
+          <input type="number" id="rawExamAvg" inputmode="decimal" step="0.01" placeholder="e.g., 78.67" aria-describedby="help-rawExamAvg err-rawExamAvg" oninput="handleInputChange('rawExamAvg')" />
+        </div>
+
+        <details class="panel-details">
+          <summary>Where to find these grades in Blackboard</summary>
+          <div class="details-body">
+            <ul>
+              <li><strong>Module 1–19 Completion Avg:</strong> Listed under your Module Completion summary column in Blackboard Grades.</li>
+              <li><strong>Unit 1–7 Checkpoint Avg:</strong> Listed under your Unit Checkpoint summary column in Blackboard Grades.</li>
+              <li><strong>Unit 1–6 Completion Avg:</strong> Listed under your Unit Completion summary column in Blackboard Grades.</li>
+              <li><strong>Discussion:</strong> Listed under the Discussion grade column in Blackboard Grades.</li>
+              <li><strong>Exam 1, Exam 2, Exam 3:</strong> Your posted exam columns (which include any exam bonus points).</li>
+              <li><strong>Raw Exam Average:</strong> Separate Blackboard column showing your unweighted exam average <em>without</em> exam bonus points.</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- SECTION 2: REVIEW ESTIMATES FOR REMAINING COURSEWORK -->
+      <section class="card" aria-labelledby="sec2-heading">
         <div class="card-header">
-          <h2>3. Bonus Opportunities</h2>
-          <span class="badge-weight">Up to +1.20% Course Boost</span>
+          <h2 id="sec2-heading">2. Review estimates for remaining coursework</h2>
+        </div>
+        <p class="section-intro">Upcoming coursework is estimated using your entered category averages. Review or change these estimates.</p>
+
+        <details class="panel-details" id="upcomingDetails">
+          <summary>Review or override 5 upcoming assignments</summary>
+          <div class="details-body">
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="mod20">Module 20 Completion</label>
+                <span class="field-help" id="help-mod20">Leave blank to use Module 1–19 Completion Avg.</span>
+                <div><span class="status-pill wait" id="status-mod20">Waiting for Module 1–19 Avg</span></div>
+                <button type="button" class="btn-restore" id="restore-mod20" style="display:none;" onclick="restoreEstimate('mod20')">Restore automatic estimate</button>
+                <div class="field-error" id="err-mod20" role="alert"></div>
+              </div>
+              <input type="number" id="mod20" inputmode="decimal" step="0.01" aria-describedby="help-mod20 status-mod20 err-mod20" oninput="handleInputChange('mod20')" />
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="mod21">Module 21 Completion</label>
+                <span class="field-help" id="help-mod21">Leave blank to use Module 1–19 Completion Avg.</span>
+                <div><span class="status-pill wait" id="status-mod21">Waiting for Module 1–19 Avg</span></div>
+                <button type="button" class="btn-restore" id="restore-mod21" style="display:none;" onclick="restoreEstimate('mod21')">Restore automatic estimate</button>
+                <div class="field-error" id="err-mod21" role="alert"></div>
+              </div>
+              <input type="number" id="mod21" inputmode="decimal" step="0.01" aria-describedby="help-mod21 status-mod21 err-mod21" oninput="handleInputChange('mod21')" />
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="cp8">Unit 8 Checkpoint</label>
+                <span class="field-help" id="help-cp8">Leave blank to use Unit 1–7 Checkpoint Avg.</span>
+                <div><span class="status-pill wait" id="status-cp8">Waiting for Unit 1–7 Avg</span></div>
+                <button type="button" class="btn-restore" id="restore-cp8" style="display:none;" onclick="restoreEstimate('cp8')">Restore automatic estimate</button>
+                <div class="field-error" id="err-cp8" role="alert"></div>
+              </div>
+              <input type="number" id="cp8" inputmode="decimal" step="0.01" aria-describedby="help-cp8 status-cp8 err-cp8" oninput="handleInputChange('cp8')" />
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="uc7">Unit 7 Completion</label>
+                <span class="field-help" id="help-uc7">Leave blank to use Unit 1–6 Completion Avg.</span>
+                <div><span class="status-pill wait" id="status-uc7">Waiting for Unit 1–6 Avg</span></div>
+                <button type="button" class="btn-restore" id="restore-uc7" style="display:none;" onclick="restoreEstimate('uc7')">Restore automatic estimate</button>
+                <div class="field-error" id="err-uc7" role="alert"></div>
+              </div>
+              <input type="number" id="uc7" inputmode="decimal" step="0.01" aria-describedby="help-uc7 status-uc7 err-uc7" oninput="handleInputChange('uc7')" />
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="uc8">Unit 8 Completion</label>
+                <span class="field-help" id="help-uc8">Leave blank to use Unit 1–6 Completion Avg.</span>
+                <div><span class="status-pill wait" id="status-uc8">Waiting for Unit 1–6 Avg</span></div>
+                <button type="button" class="btn-restore" id="restore-uc8" style="display:none;" onclick="restoreEstimate('uc8')">Restore automatic estimate</button>
+                <div class="field-error" id="err-uc8" role="alert"></div>
+              </div>
+              <input type="number" id="uc8" inputmode="decimal" step="0.01" aria-describedby="help-uc8 status-uc8 err-uc8" oninput="handleInputChange('uc8')" />
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- SECTION 3: SELECT EARNED BONUSES -->
+      <section class="card" aria-labelledby="sec3-heading">
+        <div class="card-header">
+          <h2 id="sec3-heading">3. Select earned bonuses</h2>
         </div>
 
-        <div class="syllabus-box">
-          <strong class="box-title">What is the Exploration Bonus? (From Syllabus)</strong>
-          You can complete <strong>Explorations</strong> to earn bonus points toward your <strong>Unit Checkpoint</strong> score. For each Exploration completed with a score of <strong>95% or higher</strong>, <strong>+1% point</strong> is added to your Unit Checkpoint average (which adds <strong>+0.05%</strong> to your overall course grade, up to +0.20% across all four).
-          <ul>
-            <li><strong>Where to find them:</strong> Offered only in Units 1, 4, 6, and 8 in <strong>REAL CHEM</strong>.</li>
-            <li><strong>Attempts & Deadline:</strong> You have <strong>5 attempts</strong> for each Exploration. Due <strong>December 9th at 11:59 PM</strong>.</li>
-          </ul>
+        <div class="bonus-note">
+          <strong>Prevent double counting:</strong> Enter your <em>Unit 1–7 Checkpoint Avg</em> above <strong>before</strong> Exploration bonuses, and enter <em>Raw Exam Average</em> <strong>without</strong> exam bonus points. Only check bonuses you have earned or plan to earn.
         </div>
 
-        <div class="bonus-section-label">Exploration Bonuses (95%+ Required in REAL CHEM — Due Dec 9, 11:59 PM)</div>
-        <div class="bonus-grid">
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_u1" onchange="recalc()" /> Unit 1: Modeling Uncertainty in a Changing Climate</span>
-            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
+        <div class="sub-group-title">REAL CHEM Explorations (95%+ required, 5 attempts, due Dec 9 at 11:59 PM)</div>
+        <div class="bonus-list">
+          <label class="bonus-option" for="b_u1">
+            <span class="bonus-check-wrap">
+              <input type="checkbox" id="b_u1" onchange="handleInputChange('b_u1')" />
+              <span>Unit 1 Exploration (95%+)</span>
+            </span>
+            <span class="bonus-effect">+0.05% overall</span>
           </label>
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_u4" onchange="recalc()" /> Unit 4: Decoding the Mystery of Greenhouse Molecules</span>
-            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
+          <label class="bonus-option" for="b_u4">
+            <span class="bonus-check-wrap">
+              <input type="checkbox" id="b_u4" onchange="handleInputChange('b_u4')" />
+              <span>Unit 4 Exploration (95%+)</span>
+            </span>
+            <span class="bonus-effect">+0.05% overall</span>
           </label>
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_u6" onchange="recalc()" /> Unit 6: Driving Down Greenhouse Emissions</span>
-            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
+          <label class="bonus-option" for="b_u6">
+            <span class="bonus-check-wrap">
+              <input type="checkbox" id="b_u6" onchange="handleInputChange('b_u6')" />
+              <span>Unit 6 Exploration (95%+)</span>
+            </span>
+            <span class="bonus-effect">+0.05% overall</span>
           </label>
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_u8" onchange="recalc()" /> Unit 8: What’s Our Next Big Energy Source?</span>
-            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
+          <label class="bonus-option" for="b_u8">
+            <span class="bonus-check-wrap">
+              <input type="checkbox" id="b_u8" onchange="handleInputChange('b_u8')" />
+              <span>Unit 8 Exploration (95%+)</span>
+            </span>
+            <span class="bonus-effect">+0.05% overall</span>
           </label>
         </div>
 
-        <div class="bonus-section-label">Course Survey Bonuses (Direct Course Grade Boost)</div>
-        <div class="bonus-grid">
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_pre" onchange="recalc()" /> Pre-Survey Bonus (5 pts)</span>
-            <span class="bonus-pts">+0.50% Course</span>
+        <div class="sub-group-title">Course Survey Bonuses</div>
+        <div class="bonus-list">
+          <label class="bonus-option" for="b_pre">
+            <span class="bonus-check-wrap">
+              <input type="checkbox" id="b_pre" onchange="handleInputChange('b_pre')" />
+              <span>Pre-Survey Bonus completed</span>
+            </span>
+            <span class="bonus-effect">+0.50% overall</span>
           </label>
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_post" onchange="recalc()" /> Post-Survey Bonus (5 pts)</span>
-            <span class="bonus-pts">+0.50% Course</span>
+          <label class="bonus-option" for="b_post">
+            <span class="bonus-check-wrap">
+              <input type="checkbox" id="b_post" onchange="handleInputChange('b_post')" />
+              <span>Post-Survey Bonus completed</span>
+            </span>
+            <span class="bonus-effect">+0.50% overall</span>
           </label>
         </div>
-      </div>
+
+        <details class="panel-details">
+          <summary>Full Exploration titles &amp; bonus rules</summary>
+          <div class="details-body">
+            <p>Each Exploration in <strong>REAL CHEM</strong> completed with a score of <strong>95% or higher</strong> (within 5 attempts, due <strong>December 9 at 11:59 PM</strong>) adds <strong>+1% point</strong> to your Unit Checkpoint average, which adds <strong>+0.05%</strong> to your overall course grade:</p>
+            <ul>
+              <li><strong>Unit 1:</strong> Modeling Uncertainty in a Changing Climate</li>
+              <li><strong>Unit 4:</strong> Decoding the Mystery of Greenhouse Molecules</li>
+              <li><strong>Unit 6:</strong> Driving Down Greenhouse Emissions</li>
+              <li><strong>Unit 8:</strong> What’s Our Next Big Energy Source?</li>
+            </ul>
+            <p>The <strong>Pre-Survey</strong> and <strong>Post-Survey</strong> bonuses each add <strong>+0.50%</strong> directly to your overall course grade.</p>
+          </div>
+        </details>
+      </section>
     </div>
 
-    <!-- RIGHT COLUMN: RESULTS & STUDENT GUIDANCE -->
+    <!-- RIGHT COLUMN: RESULTS ANSWERING THREE STUDENT QUESTIONS -->
     <div class="sticky-col">
-      <div class="card">
+      <section class="card" aria-labelledby="results-heading">
         <div class="card-header">
-          <h2>Projected Final Grade</h2>
-          <span class="badge-weight">Live Comparison</span>
+          <h2 id="results-heading">Your Grade Projection</h2>
         </div>
 
-        <div class="options-compare">
-          <div class="option-box" id="boxOpt1">
-            <div class="opt-title">Option 1: With Final</div>
-            <div class="opt-score" id="opt1Score">--%</div>
-            <div class="opt-letter" id="opt1Letter">-</div>
-          </div>
-          <div class="option-box" id="boxOpt2">
-            <div class="opt-title">Option 2: Raw Exam Avg</div>
-            <div class="opt-score" id="opt2Score">--%</div>
-            <div class="opt-letter" id="opt2Letter">-</div>
+        <div class="sr-only" id="liveAnnouncement" aria-live="polite"></div>
+
+        <!-- QUESTION 1: PROJECTED GRADE WITHOUT THE FINAL -->
+        <div class="result-block primary-result">
+          <h3>Projected grade without the final</h3>
+          <div id="withoutFinalOutput">
+            <p class="empty-prompt">Enter your Blackboard grades to see your projection.</p>
           </div>
         </div>
 
-        <!-- DOMINANT TARGET FINAL EXAM SECTION -->
-        <div class="target-hero">
-          <div class="target-controls">
-            <label for="targetGrade">What Final Exam score do I need for:</label>
-            <select id="targetGrade" class="target-select" onchange="recalc()">
+        <!-- QUESTION 2: WHAT FINAL SCORE WOULD REACH MY GOAL? -->
+        <div class="result-block">
+          <h3>What final score would reach my goal?</h3>
+          <div class="goal-row">
+            <label for="targetGoal">Target course grade:</label>
+            <select id="targetGoal" onchange="handleInputChange('targetGoal')">
+              <option value="">Choose a goal...</option>
               <option value="90">A (90%)</option>
               <option value="80">B (80%)</option>
               <option value="70">C (70%)</option>
               <option value="60">D (60%)</option>
             </select>
           </div>
-          <div class="target-big-display" id="targetResult"></div>
+          <div class="goal-outcome" id="goalOutput">
+            Select a target grade above once your Blackboard grades are entered.
+          </div>
         </div>
 
-        <!-- COLLAPSIBLE WEIGHTED BREAKDOWN -->
-        <details class="breakdown-toggle">
-          <summary>Show weighted point breakdown (optional)</summary>
-          <div class="breakdown-list">
-            <div class="breakdown-row"><span>Coursework Contribution (40% max):</span><strong id="outCw">--</strong></div>
-            <div class="breakdown-row"><span>Ranked Regular Exams (45% max):</span><strong id="outEx">--</strong></div>
-            <div class="breakdown-row"><span>Final Exam / Raw Avg (15% max):</span><strong id="outFin">--</strong></div>
-            <div class="breakdown-row"><span>Total Bonus Points Earned:</span><strong id="outBonus" style="color:var(--accent)">--</strong></div>
+        <!-- QUESTION 3: WHAT HAPPENS IF I EARN A PARTICULAR FINAL SCORE? -->
+        <div class="result-block">
+          <h3>What happens if I earn a particular final score?</h3>
+          <div class="hypothetical-input-row">
+            <label for="hypFinal">If I score</label>
+            <input type="number" id="hypFinal" inputmode="decimal" step="0.01" placeholder="--" aria-describedby="err-hypFinal" oninput="handleInputChange('hypFinal')" />
+            <span>% on the final…</span>
+          </div>
+          <div class="field-error" id="err-hypFinal" role="alert"></div>
+          <div class="scenario-outcome" id="scenarioOutput">
+            Enter a hypothetical final exam score above to compare it with your without-final projection.
+          </div>
+        </div>
+
+        <!-- EXPANDABLE CALCULATION DETAILS -->
+        <details class="panel-details">
+          <summary>How this estimate is calculated</summary>
+          <div class="details-body">
+            <p><strong>Course Weighting:</strong></p>
+            <ul>
+              <li><strong>Module Completion (10%):</strong> Modules 1–19 = 9.05% (19/21), Module 20 = 0.48% (1/21), Module 21 = 0.48% (1/21).</li>
+              <li><strong>Unit Checkpoints (5%):</strong> Units 1–7 = 4.38% (7/8), Unit 8 = 0.63% (1/8).</li>
+              <li><strong>Unit Completion (5%):</strong> Units 1–6 = 3.75% (6/8), Unit 7 = 0.63% (1/8), Unit 8 = 0.63% (1/8).</li>
+              <li><strong>Discussion (20%):</strong> Direct 20% category weight.</li>
+              <li><strong>Regular Exams (45%):</strong> Automatically ranked from highest to lowest: highest = 20%, middle = 15%, lowest = 10%.</li>
+              <li><strong>Final-Exam Component (15%):</strong> Uses your official <em>Raw Exam Average</em> if you do not take the final, or your cumulative final score if you take it.</li>
+              <li><strong>Bonuses:</strong> Added directly to the overall course percentage (+0.05% per Exploration, +0.50% per Survey).</li>
+            </ul>
+            <div id="liveBreakdownContainer"></div>
           </div>
         </details>
-      </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h2>What should I do?</h2>
+        <!-- OFFICIAL SYLLABUS LINK & DISCLAIMER -->
+        <div class="policy-footer">
+          <p style="margin: 0 0 6px 0;">
+            <strong>Full grading policies: <a href="https://docs.google.com/document/d/162K0v-NiEqfSOtzQ87eVE_OTDTvDXu7xG074u4hwwp0/edit?usp=sharing" target="_blank" rel="noopener noreferrer">CHEM 101 syllabus</a></strong>
+          </p>
+          <p style="margin: 0;">
+            This calculator provides an unofficial projection based on your entries and any estimated scores. Official grades are determined by the course’s published grading policies.
+          </p>
         </div>
-        <div id="guidanceContainer"></div>
-        <p class="disclaimer">This tool provides an unofficial projection based on your entered scores. Always verify official grades and your raw exam average in Blackboard.</p>
-      </div>
+      </section>
     </div>
   </div>
 </div>
 
 <script>
-  const DEFAULTS = {
-    mod1_19: 95.24, mod20: "", mod21: "",
-    cp1_7: 79.85, cp8: "",
-    uc1_6: 90, uc7: "", uc8: "",
-    discussion: 77.15,
-    exam1: 83, exam2: 74, exam3: 86,
-    rawExamAvgInput: "",
-    finalExam: "",
-    b_pre: true, b_post: true, b_u1: true, b_u4: true, b_u6: true, b_u8: true
+  const STORAGE_KEY = "chem101_calc_v9_student";
+
+  const REQUIRED_FIELDS = [
+    { id: "mod1_19", label: "Module 1–19 Completion Avg", min: 0, max: 100 },
+    { id: "cp1_7", label: "Unit 1–7 Checkpoint Avg", min: 0, max: 100 },
+    { id: "uc1_6", label: "Unit 1–6 Completion Avg", min: 0, max: 100 },
+    { id: "discussion", label: "Discussion", min: 0, max: 100 },
+    { id: "exam1", label: "Exam 1", min: 0, max: 110 },
+    { id: "exam2", label: "Exam 2", min: 0, max: 110 },
+    { id: "exam3", label: "Exam 3", min: 0, max: 110 },
+    { id: "rawExamAvg", label: "Raw Exam Average", min: 0, max: 100 }
+  ];
+
+  const UPCOMING_FIELDS = [
+    { id: "mod20", sourceId: "mod1_19", sourceName: "Module 1–19 Avg", min: 0, max: 100 },
+    { id: "mod21", sourceId: "mod1_19", sourceName: "Module 1–19 Avg", min: 0, max: 100 },
+    { id: "cp8", sourceId: "cp1_7", sourceName: "Unit 1–7 Avg", min: 0, max: 100 },
+    { id: "uc7", sourceId: "uc1_6", sourceName: "Unit 1–6 Avg", min: 0, max: 100 },
+    { id: "uc8", sourceId: "uc1_6", sourceName: "Unit 1–6 Avg", min: 0, max: 100 }
+  ];
+
+  const BONUS_IDS = ["b_u1", "b_u4", "b_u6", "b_u8", "b_pre", "b_post"];
+
+  const EXAMPLE_STATE = {
+    mod1_19: "95.00",
+    cp1_7: "79.85",
+    uc1_6: "90.00",
+    discussion: "77.15",
+    exam1: "83.00",
+    exam2: "74.00",
+    exam3: "86.00",
+    rawExamAvg: "78.67",
+    mod20: "",
+    mod21: "",
+    cp8: "",
+    uc7: "",
+    uc8: "",
+    b_u1: true,
+    b_u4: true,
+    b_u6: false,
+    b_u8: false,
+    b_pre: true,
+    b_post: false,
+    targetGoal: "80",
+    hypFinal: ""
   };
 
-  function getNum(id) {
-    const val = document.getElementById(id).value.trim();
-    if (val === "") return null;
-    const n = parseFloat(val);
-    return isNaN(n) ? null : Math.max(0, Math.min(100, n));
+  let isExampleMode = false;
+  let studentState = createBlankState();
+  let lastAnnouncement = "";
+
+  function createBlankState() {
+    return {
+      mod1_19: "",
+      cp1_7: "",
+      uc1_6: "",
+      discussion: "",
+      exam1: "",
+      exam2: "",
+      exam3: "",
+      rawExamAvg: "",
+      mod20: "",
+      mod21: "",
+      cp8: "",
+      uc7: "",
+      uc8: "",
+      b_u1: false,
+      b_u4: false,
+      b_u6: false,
+      b_u8: false,
+      b_pre: false,
+      b_post: false,
+      targetGoal: "",
+      hypFinal: ""
+    };
   }
 
-  function toLetter(score) {
+  function loadStudentState() {
+    const base = createBlankState();
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        Object.keys(base).forEach((k) => {
+          if (k in parsed) {
+            base[k] = typeof base[k] === "boolean" ? Boolean(parsed[k]) : String(parsed[k] ?? "");
+          }
+        });
+      }
+    } catch (e) {
+      // Ignore storage errors in restricted iframes
+    }
+    studentState = base;
+  }
+
+  function saveStudentState() {
+    if (isExampleMode) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(studentState));
+    } catch (e) {
+      // Ignore storage errors
+    }
+  }
+
+  function applyStateToDOM(state) {
+    Object.keys(state).forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === "checkbox") {
+        el.checked = Boolean(state[id]);
+      } else {
+        el.value = state[id];
+      }
+    });
+  }
+
+  function handleInputChange(id) {
+    const activeState = isExampleMode ? EXAMPLE_STATE : studentState;
+    const el = document.getElementById(id);
+    if (!el) return;
+    activeState[id] = el.type === "checkbox" ? el.checked : el.value;
+    if (!isExampleMode) {
+      saveStudentState();
+    }
+    recalculate(activeState);
+  }
+
+  function restoreEstimate(upcomingId) {
+    const activeState = isExampleMode ? EXAMPLE_STATE : studentState;
+    activeState[upcomingId] = "";
+    const el = document.getElementById(upcomingId);
+    if (el) {
+      el.value = "";
+      el.focus();
+    }
+    if (!isExampleMode) {
+      saveStudentState();
+    }
+    recalculate(activeState);
+  }
+
+  function toggleExampleMode() {
+    if (isExampleMode) {
+      exitExampleMode();
+      return;
+    }
+    isExampleMode = true;
+    document.getElementById("exampleBanner").classList.add("active");
+    document.getElementById("btnExample").textContent = "Exit example";
+    applyStateToDOM(EXAMPLE_STATE);
+    recalculate(EXAMPLE_STATE);
+  }
+
+  function exitExampleMode() {
+    isExampleMode = false;
+    document.getElementById("exampleBanner").classList.remove("active");
+    document.getElementById("btnExample").textContent = "View an example";
+    applyStateToDOM(studentState);
+    recalculate(studentState);
+  }
+
+  function clearInputs() {
+    if (isExampleMode) {
+      isExampleMode = false;
+      document.getElementById("exampleBanner").classList.remove("active");
+      document.getElementById("btnExample").textContent = "View an example";
+    }
+    studentState = createBlankState();
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+    applyStateToDOM(studentState);
+    recalculate(studentState);
+  }
+
+  function parseNumericField(rawStr, min, max) {
+    const trimmed = String(rawStr ?? "").trim();
+    if (trimmed === "") {
+      return { status: "empty", value: null, error: null };
+    }
+    const num = Number(trimmed);
+    if (!Number.isFinite(num)) {
+      return { status: "invalid", value: null, error: "Enter a valid number." };
+    }
+    if (num < min || num > max) {
+      return { status: "invalid", value: null, error: `Enter a value between ${min} and ${max}.` };
+    }
+    return { status: "valid", value: num, error: null };
+  }
+
+  function setFieldError(id, errorMsg) {
+    const inputEl = document.getElementById(id);
+    const errEl = document.getElementById(`err-${id}`);
+    if (!inputEl || !errEl) return;
+    if (errorMsg) {
+      inputEl.classList.add("invalid");
+      inputEl.setAttribute("aria-invalid", "true");
+      errEl.textContent = errorMsg;
+      errEl.classList.add("visible");
+    } else {
+      inputEl.classList.remove("invalid");
+      inputEl.removeAttribute("aria-invalid");
+      errEl.textContent = "";
+      errEl.classList.remove("visible");
+    }
+  }
+
+  function toLetterGrade(score) {
     if (score >= 90) return "A";
     if (score >= 80) return "B";
     if (score >= 70) return "C";
@@ -738,57 +1166,120 @@
     return "F";
   }
 
-  function resolveField(id, fallback, hintId, autoPrefix = "Auto-estimated at") {
-    const el = document.getElementById(id);
-    const hintEl = document.getElementById(hintId);
-    const val = getNum(id);
-    if (val === null) {
-      el.classList.add("is-auto");
-      if (hintEl && id !== "rawExamAvgInput") {
-        hintEl.textContent = `${autoPrefix} ${fallback.toFixed(2)}%`;
-      } else if (hintEl && id === "rawExamAvgInput") {
-        hintEl.textContent = `Found in Blackboard grades (excludes exam bonus points). Currently blank — temporarily estimating with ${fallback.toFixed(2)}%.`;
-      }
-      return fallback;
-    } else {
-      el.classList.remove("is-auto");
-      if (hintEl && id !== "rawExamAvgInput") {
-        hintEl.textContent = "Entered score";
-      } else if (hintEl && id === "rawExamAvgInput") {
-        hintEl.textContent = "Using your entered Blackboard Raw Exam Average.";
-      }
-      return val;
-    }
+  function ceilToTwoDecimals(val) {
+    return Math.ceil((val - 1e-12) * 100) / 100;
   }
 
-  function recalc() {
-    // Coursework: Module 1-19 is 19/21 of the 10% Module weight (19/210); Modules 20 & 21 are 1/21 each (1/210)
-    const m1_19 = getNum("mod1_19") ?? 0;
-    const m20 = resolveField("mod20", m1_19, "hint_mod20");
-    const m21 = resolveField("mod21", m1_19, "hint_mod21");
+  function announceOnce(message) {
+    if (message === lastAnnouncement) return;
+    lastAnnouncement = message;
+    const region = document.getElementById("liveAnnouncement");
+    if (region) region.textContent = message;
+  }
 
-    const cp1_7 = getNum("cp1_7") ?? 0;
-    const cp8 = resolveField("cp8", cp1_7, "hint_cp8");
+  function recalculate(state) {
+    const parsed = {};
+    let hasRequiredInvalid = false;
+    let hasRequiredMissing = false;
 
-    const uc1_6 = getNum("uc1_6") ?? 0;
-    const uc7 = resolveField("uc7", uc1_6, "hint_uc7");
-    const uc8 = resolveField("uc8", uc1_6, "hint_uc8");
+    // 1. Validate required Blackboard grades
+    REQUIRED_FIELDS.forEach((f) => {
+      const res = parseNumericField(state[f.id], f.min, f.max);
+      parsed[f.id] = res;
+      setFieldError(f.id, res.error);
+      if (res.status === "invalid") hasRequiredInvalid = true;
+      if (res.status === "empty") hasRequiredMissing = true;
+    });
 
-    const disc = getNum("discussion") ?? 0;
+    // 2. Validate and resolve upcoming coursework estimates
+    let estimatedCount = 0;
+    let overrideCount = 0;
+    let hasUpcomingInvalid = false;
 
-    // Exploration Bonus: +1% to Unit Checkpoint average per Exploration (95%+) -> +0.05% course grade each
-    const explorationCount =
-      (document.getElementById("b_u1").checked ? 1 : 0) +
-      (document.getElementById("b_u4").checked ? 1 : 0) +
-      (document.getElementById("b_u6").checked ? 1 : 0) +
-      (document.getElementById("b_u8").checked ? 1 : 0);
+    UPCOMING_FIELDS.forEach((u) => {
+      const res = parseNumericField(state[u.id], u.min, u.max);
+      setFieldError(u.id, res.error);
+      const inputEl = document.getElementById(u.id);
+      const statusEl = document.getElementById(`status-${u.id}`);
+      const restoreBtn = document.getElementById(`restore-${u.id}`);
+      const sourceRes = parsed[u.sourceId];
 
-    const explorationCourseBonus = explorationCount * 0.05;
-    const surveyCourseBonus =
-      (document.getElementById("b_pre").checked ? 0.50 : 0) +
-      (document.getElementById("b_post").checked ? 0.50 : 0);
+      if (res.status === "invalid") {
+        hasUpcomingInvalid = true;
+        inputEl.classList.remove("is-estimated");
+        statusEl.className = "status-pill wait";
+        statusEl.textContent = "Invalid override value";
+        restoreBtn.style.display = "inline-block";
+        parsed[u.id] = { status: "invalid", value: null };
+      } else if (res.status === "valid") {
+        // Explicit entered number (including 0)
+        overrideCount++;
+        inputEl.classList.remove("is-estimated");
+        statusEl.className = "status-pill ovr";
+        statusEl.textContent = `Entered override (${res.value.toFixed(2)}%)`;
+        restoreBtn.style.display = "inline-block";
+        parsed[u.id] = { status: "override", value: res.value };
+      } else {
+        // Blank upcoming assignment -> automatic estimate from category average
+        restoreBtn.style.display = "none";
+        if (sourceRes.status === "valid") {
+          estimatedCount++;
+          inputEl.classList.add("is-estimated");
+          inputEl.placeholder = sourceRes.value.toFixed(2);
+          statusEl.className = "status-pill est";
+          statusEl.textContent = `Estimated at ${sourceRes.value.toFixed(2)}% (from ${u.sourceName})`;
+          parsed[u.id] = { status: "estimated", value: sourceRes.value };
+        } else {
+          inputEl.classList.add("is-estimated");
+          inputEl.placeholder = "Auto";
+          statusEl.className = "status-pill wait";
+          statusEl.textContent = `Waiting for ${u.sourceName}`;
+          parsed[u.id] = { status: "waiting", value: null };
+        }
+      }
+    });
 
-    const bonusPts = explorationCourseBonus + surveyCourseBonus;
+    // 3. Validate hypothetical final exam score
+    const hypRes = parseNumericField(state.hypFinal, 0, 100);
+    setFieldError("hypFinal", hypRes.error);
+
+    const withoutFinalEl = document.getElementById("withoutFinalOutput");
+    const goalEl = document.getElementById("goalOutput");
+    const scenarioEl = document.getElementById("scenarioOutput");
+    const breakdownEl = document.getElementById("liveBreakdownContainer");
+
+    // Withhold projections if required inputs are missing or invalid
+    if (hasRequiredInvalid || hasUpcomingInvalid) {
+      withoutFinalEl.innerHTML = `<p class="empty-prompt">Fix the highlighted input error(s) to view your projection.</p>`;
+      goalEl.textContent = "Fix highlighted input errors to calculate your target final exam score.";
+      scenarioEl.textContent = "Fix highlighted input errors to compare final exam scenarios.";
+      breakdownEl.innerHTML = "";
+      announceOnce("Input error detected. Fix highlighted fields to update projection.");
+      return;
+    }
+
+    if (hasRequiredMissing) {
+      withoutFinalEl.innerHTML = `<p class="empty-prompt">Enter your Blackboard grades to see your projection.</p>`;
+      goalEl.textContent = "Enter all eight Blackboard grades first to calculate the final exam score needed for your goal.";
+      scenarioEl.textContent = "Enter all eight Blackboard grades first to compare a hypothetical final exam score.";
+      breakdownEl.innerHTML = "";
+      announceOnce("Enter your Blackboard grades to see your projection.");
+      return;
+    }
+
+    // All 8 required Blackboard grades and 5 upcoming items are valid
+    const m1_19 = parsed.mod1_19.value;
+    const m20 = parsed.mod20.value;
+    const m21 = parsed.mod21.value;
+
+    const cp1_7 = parsed.cp1_7.value;
+    const cp8 = parsed.cp8.value;
+
+    const uc1_6 = parsed.uc1_6.value;
+    const uc7 = parsed.uc7.value;
+    const uc8 = parsed.uc8.value;
+
+    const disc = parsed.discussion.value;
 
     const cwWeighted =
       m1_19 * (19 / 210) +
@@ -799,204 +1290,132 @@
       (uc7 + uc8) * 0.00625 +
       disc * 0.20;
 
-    // Regular Exams
-    const enteredExams = [getNum("exam1"), getNum("exam2"), getNum("exam3")].filter(v => v !== null);
-    const fallbackExam = enteredExams.length > 0
-      ? enteredExams.reduce((a, b) => a + b, 0) / enteredExams.length
-      : 0;
-
-    const e1 = resolveField("exam1", fallbackExam, "hint_ex1");
-    const e2 = resolveField("exam2", fallbackExam, "hint_ex2");
-    const e3 = resolveField("exam3", fallbackExam, "hint_ex3");
-
-    const sortedExams = [
-      { name: "Exam 1", score: e1 },
-      { name: "Exam 2", score: e2 },
-      { name: "Exam 3", score: e3 }
+    // Auto-rank Exams 1-3 (20% highest, 15% middle, 10% lowest)
+    const rankedExams = [
+      { name: "Exam 1", score: parsed.exam1.value },
+      { name: "Exam 2", score: parsed.exam2.value },
+      { name: "Exam 3", score: parsed.exam3.value }
     ].sort((a, b) => b.score - a.score);
 
     const rankedExamPts =
-      sortedExams[0].score * 0.20 +
-      sortedExams[1].score * 0.15 +
-      sortedExams[2].score * 0.10;
+      rankedExams[0].score * 0.20 +
+      rankedExams[1].score * 0.15 +
+      rankedExams[2].score * 0.10;
 
-    const calcExamAvg = (e1 + e2 + e3) / 3;
-    const rawExamAvg = resolveField("rawExamAvgInput", calcExamAvg, "hint_raw");
-    const finalScore = resolveField("finalExam", rawExamAvg, "hint_final", "Blank — using Raw Exam Avg:");
+    const rawExamAvg = parsed.rawExamAvg.value;
 
-    // Options
-    const opt1 = cwWeighted + rankedExamPts + finalScore * 0.15 + bonusPts;
-    const opt2 = cwWeighted + rankedExamPts + rawExamAvg * 0.15 + bonusPts;
-    const opt2Letter = toLetter(opt2);
-    const opt1Letter = toLetter(opt1);
+    // Earned bonuses
+    const expCount = ["b_u1", "b_u4", "b_u6", "b_u8"].filter((id) => Boolean(state[id])).length;
+    const surveyPts = (state.b_pre ? 0.50 : 0) + (state.b_post ? 0.50 : 0);
+    const totalBonus = expCount * 0.05 + surveyPts;
 
-    // Render Pills
-    document.getElementById("rankPills").innerHTML = `
-      <span class="pill">Highest (20%): <strong>${sortedExams[0].name} (${sortedExams[0].score.toFixed(1)}%)</strong></span>
-      <span class="pill">Middle (15%): <strong>${sortedExams[1].name} (${sortedExams[1].score.toFixed(1)}%)</strong></span>
-      <span class="pill">Lowest (10%): <strong>${sortedExams[2].name} (${sortedExams[2].score.toFixed(1)}%)</strong></span>
-      <span class="pill">Raw Avg (Opt 2): <strong>${rawExamAvg.toFixed(2)}%</strong></span>
+    const baseWithoutFinalComponent = cwWeighted + rankedExamPts + totalBonus;
+    const withoutFinalPct = baseWithoutFinalComponent + rawExamAvg * 0.15;
+    const withoutFinalLetter = toLetterGrade(withoutFinalPct);
+
+    // Assumptions notice
+    let assumptionsText = "";
+    if (estimatedCount === 5) {
+      assumptionsText = "Includes automatic estimates for all 5 upcoming assignments.";
+    } else if (estimatedCount > 0) {
+      assumptionsText = `Includes automatic estimates for ${estimatedCount} upcoming assignment${estimatedCount > 1 ? "s" : ""} and ${overrideCount} entered override${overrideCount > 1 ? "s" : ""}.`;
+    } else {
+      assumptionsText = "Uses your entered scores for all 5 upcoming assignments (no automatic estimates).";
+    }
+
+    withoutFinalEl.innerHTML = `
+      <div class="grade-readout">
+        <span class="grade-pct">${withoutFinalPct.toFixed(2)}%</span>
+        <span class="grade-letter-badge">Letter Grade: ${withoutFinalLetter}</span>
+      </div>
+      <div class="assumptions-notice">${assumptionsText}</div>
     `;
 
-    // Render Results
-    document.getElementById("opt1Score").textContent = opt1.toFixed(2) + "%";
-    document.getElementById("opt1Letter").textContent = opt1Letter;
-    document.getElementById("opt2Score").textContent = opt2.toFixed(2) + "%";
-    document.getElementById("opt2Letter").textContent = opt2Letter;
-
-    document.getElementById("boxOpt1").classList.toggle("winner", opt1 > opt2);
-    document.getElementById("boxOpt2").classList.toggle("winner", opt2 >= opt1);
-
-    document.getElementById("outCw").textContent = `${cwWeighted.toFixed(2)} / 40.00%`;
-    document.getElementById("outEx").textContent = `${rankedExamPts.toFixed(2)} / 45.00%`;
-    document.getElementById("outFin").textContent = `${(finalScore * 0.15).toFixed(2)}% (Opt 1) | ${(rawExamAvg * 0.15).toFixed(2)}% (Opt 2)`;
-    document.getElementById("outBonus").textContent = `+${bonusPts.toFixed(2)}% (+${explorationCount}% Checkpoint avg)`;
-
-    // Dominant Target Solver
-    const target = parseFloat(document.getElementById("targetGrade").value);
-    const targetLetter = toLetter(target);
-    const baseWithoutFinal = cwWeighted + rankedExamPts + bonusPts;
-    const neededFinal = (target - baseWithoutFinal) / 0.15;
-    const targetEl = document.getElementById("targetResult");
-
-    if (opt2 >= target) {
-      targetEl.innerHTML = `
-        <div class="target-big-number achieved">Already Locked In (Option 2)</div>
-        <div class="target-subtext">Your Option 2 grade is already <strong>${opt2.toFixed(2)}% (${opt2Letter})</strong>, so you do not need the Cumulative Final to reach a <strong>${targetLetter} (${target}%)</strong>.</div>
-      `;
-    } else if (neededFinal <= 0) {
-      targetEl.innerHTML = `
-        <div class="target-big-number achieved">0% Needed — Guaranteed</div>
-        <div class="target-subtext">You have already secured at least a <strong>${target}% (${targetLetter})</strong> regardless of your Final Exam score.</div>
-      `;
-    } else if (neededFinal > 100) {
-      targetEl.innerHTML = `
-        <div class="target-big-number impossible">${neededFinal.toFixed(1)}% Needed (Above 100%)</div>
-        <div class="target-subtext">Even a 100% on the Cumulative Final Exam puts your maximum possible course percentage at <strong>${(baseWithoutFinal + 15).toFixed(2)}%</strong>, which is below the <strong>${target}% (${targetLetter})</strong> threshold.</div>
-      `;
+    // Question 2: Target goal solver
+    const targetVal = state.targetGoal;
+    if (!targetVal) {
+      goalEl.textContent = "Select a target course grade above to see the minimum final exam score needed.";
     } else {
-      targetEl.innerHTML = `
-        <div class="target-big-number">${neededFinal.toFixed(1)}% on Final Exam</div>
-        <div class="target-subtext">Score at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with a <strong>${targetLetter} (${target}%)</strong>.</div>
-      `;
-    }
+      const targetNum = Number(targetVal);
+      const targetLetter = toLetterGrade(targetNum);
+      const exactRequired = (targetNum - baseWithoutFinalComponent) / 0.15;
+      const roundedRequired = ceilToTwoDecimals(exactRequired);
 
-    // Guidance Engine ("What should I do?")
-    const tips = [];
-    const finalEntered = getNum("finalExam") !== null;
-    const rawEntered = getNum("rawExamAvgInput") !== null;
-
-    if (!rawEntered) {
-      tips.push({
-        type: "warn",
-        title: "Enter Your Raw Exam Average from Blackboard",
-        body: "Because Exams 1–3 include exam bonus points, look up your official Raw Exam Average in your Blackboard grades and enter it in the blue box to see your accurate Option 2 grade."
-      });
-    }
-
-    // Determine next letter grade threshold above Option 2
-    let nextThreshold = null;
-    let nextLetter = null;
-    if (opt2 < 60) { nextThreshold = 60; nextLetter = "D"; }
-    else if (opt2 < 70) { nextThreshold = 70; nextLetter = "C"; }
-    else if (opt2 < 80) { nextThreshold = 80; nextLetter = "B"; }
-    else if (opt2 < 90) { nextThreshold = 90; nextLetter = "A"; }
-
-    if (!finalEntered) {
-      let letterNote = "";
-      if (nextThreshold === null) {
-        letterNote = `Because Option 2 already puts you at <strong>${opt2.toFixed(2)}% (Letter Grade: A)</strong>, taking the Final Exam cannot raise your letter grade further.`;
+      if (withoutFinalPct >= targetNum) {
+        goalEl.innerHTML = `
+          <span class="goal-highlight ok">No final exam needed to reach ${targetLetter} (${targetNum}%)</span>
+          Your projected grade without the final (${withoutFinalPct.toFixed(2)}%) meets your selected goal, assuming the coursework scores shown.
+        `;
+      } else if (roundedRequired <= 0) {
+        goalEl.innerHTML = `
+          <span class="goal-highlight ok">0.00% needed on the final</span>
+          Your projected grade reaches ${targetLetter} (${targetNum}%) even with a 0% final exam, assuming the coursework scores shown.
+        `;
+      } else if (roundedRequired > 100) {
+        const maxWith100Final = baseWithoutFinalComponent + 15;
+        const maxLetter = toLetterGrade(maxWith100Final);
+        goalEl.innerHTML = `
+          <span class="goal-highlight warn">${targetLetter === "A" ? "An A" : `A ${targetLetter}`} is not reachable through the final exam alone using these coursework estimates.</span>
+          Even a <strong>100%</strong> on the cumulative final exam yields a projected course grade of <strong>${maxWith100Final.toFixed(2)}% (${maxLetter})</strong>, assuming the coursework and bonus entries shown.
+        `;
       } else {
-        const reqForNextLetter = (nextThreshold - baseWithoutFinal) / 0.15;
-        if (reqForNextLetter <= 100) {
-          letterNote = `To move up from a letter grade of <strong>${opt2Letter}</strong> to <strong>${nextLetter} (${nextThreshold}%)</strong>, you would need at least <strong>${reqForNextLetter.toFixed(1)}%</strong> on the Cumulative Final Exam.`;
-        } else {
-          letterNote = `Note: Even with 100% on the Cumulative Final Exam (which yields ${(baseWithoutFinal + 15).toFixed(2)}%), your overall course percentage would remain below the ${nextThreshold}% cutoff for a letter grade of <strong>${nextLetter}</strong>.`;
-        }
+        const resultingPct = baseWithoutFinalComponent + roundedRequired * 0.15;
+        goalEl.innerHTML = `
+          <span class="goal-highlight">Minimum final score needed: ${roundedRequired.toFixed(2)}%</span>
+          Scoring <strong>${roundedRequired.toFixed(2)}%</strong> on the cumulative final exam produces <strong>${resultingPct.toFixed(2)}% (${targetLetter})</strong>, assuming the coursework scores shown.
+        `;
+      }
+    }
+
+    // Question 3: Hypothetical final exam scenario
+    if (hypRes.status === "invalid") {
+      scenarioEl.textContent = "Enter a valid final exam percentage between 0 and 100.";
+    } else if (hypRes.status === "empty") {
+      scenarioEl.textContent = "Enter a hypothetical final exam score above to see your projected grade if you take the final.";
+    } else {
+      const hypScore = hypRes.value;
+      const withFinalPct = baseWithoutFinalComponent + hypScore * 0.15;
+      const withFinalLetter = toLetterGrade(withFinalPct);
+      const diff = withFinalPct - withoutFinalPct;
+      const diffSign = diff >= 0 ? "+" : "";
+
+      let comparisonNote = "";
+      if (Math.abs(hypScore - rawExamAvg) < 0.005) {
+        comparisonNote = `This equals your Raw Exam Average (${rawExamAvg.toFixed(2)}%), resulting in the same course percentage (${withFinalPct.toFixed(2)}%) as not taking the final.`;
+      } else if (hypScore > rawExamAvg) {
+        comparisonNote = `Because ${hypScore.toFixed(2)}% is higher than your Raw Exam Average (${rawExamAvg.toFixed(2)}%), the with-final calculation is <strong>${diffSign}${diff.toFixed(2)}%</strong> higher than your without-final projection (${withoutFinalPct.toFixed(2)}%).`;
+      } else {
+        comparisonNote = `Because ${hypScore.toFixed(2)}% is lower than your Raw Exam Average (${rawExamAvg.toFixed(2)}%), the with-final calculation is <strong>${diff.toFixed(2)}%</strong> lower than your without-final projection (${withoutFinalPct.toFixed(2)}%). Under course policy, verify whether taking the final replaces your Raw Exam Average even if the final score is lower.`;
       }
 
-      tips.push({
-        type: "info",
-        title: "Should you take the Cumulative Final Exam?",
-        body: `Under Option 2, replacing the final with your ${rawExamAvg.toFixed(2)}% Raw Exam Average gives you an overall course percentage of <strong>${opt2.toFixed(2)}% (Letter Grade: ${opt2Letter})</strong>. Scoring above <strong>${rawExamAvg.toFixed(1)}%</strong> on the Cumulative Final will increase your overall <em>course percentage</em>, while scoring below it leaves your Option 2 percentage unchanged. ${letterNote}`
-      });
-    } else if (opt1 > opt2) {
-      const letterMsg = opt1Letter !== opt2Letter
-        ? `and raises your letter grade from <strong>${opt2Letter}</strong> to <strong>${opt1Letter}</strong>.`
-        : `though your letter grade remains <strong>${opt1Letter}</strong>.`;
-      tips.push({
-        type: "info",
-        title: "Option 1 Raises Your Course Percentage",
-        body: `Your Final Exam score (${finalScore.toFixed(1)}%) beats your Raw Exam Average (${rawExamAvg.toFixed(2)}%), increasing your overall course percentage by +${(opt1 - opt2).toFixed(2)}% (to <strong>${opt1.toFixed(2)}%</strong>) ${letterMsg}`
-      });
+      scenarioEl.innerHTML = `
+        <div class="grade-readout" style="margin-bottom:6px;">
+          <span class="grade-pct" style="font-size:1.55rem;">${withFinalPct.toFixed(2)}%</span>
+          <span class="grade-letter-badge">Letter Grade: ${withFinalLetter}</span>
+        </div>
+        <div>${comparisonNote}</div>
+      `;
     }
 
-    if (explorationCount < 4) {
-      const remainingExp = 4 - explorationCount;
-      tips.push({
-        type: "warn",
-        title: `${remainingExp} Exploration Bonus${remainingExp > 1 ? "es" : ""} Unchecked (Due Dec 9, 11:59 PM)`,
-        body: `If you have not yet completed all Explorations in REAL CHEM (Units 1, 4, 6, and 8), scoring 95% or higher within your 5 attempts adds +1% to your Unit Checkpoint average per Exploration (+${(remainingExp * 0.05).toFixed(2)}% to your overall course percentage).`
-      });
-    }
-
-    if (disc < 80) {
-      tips.push({
-        type: "warn",
-        title: "High-Leverage Category: Discussion (20% Weight)",
-        body: `Your Discussion score (${disc.toFixed(1)}%) carries the same weight as your highest regular exam (20%). Completing any remaining discussion assignments at a high score will lift both Option 1 and Option 2.`
-      });
-    }
-
-    document.getElementById("guidanceContainer").innerHTML = tips.map(t => `
-      <div class="guidance-card ${t.type === "warn" ? "warn" : ""}">
-        <strong class="tip-title">${t.title}</strong>
-        <span>${t.body}</span>
+    // Expandable calculation breakdown
+    breakdownEl.innerHTML = `
+      <div style="margin-top:8px; padding-top:8px; border-top:1px solid #cbd5e1;">
+        <div class="breakdown-row"><span>Coursework contribution (40% max):</span><strong>${cwWeighted.toFixed(2)}%</strong></div>
+        <div class="breakdown-row"><span>Highest exam (${rankedExams[0].name}, 20%):</span><strong>${(rankedExams[0].score * 0.20).toFixed(2)}%</strong></div>
+        <div class="breakdown-row"><span>Middle exam (${rankedExams[1].name}, 15%):</span><strong>${(rankedExams[1].score * 0.15).toFixed(2)}%</strong></div>
+        <div class="breakdown-row"><span>Lowest exam (${rankedExams[2].name}, 10%):</span><strong>${(rankedExams[2].score * 0.10).toFixed(2)}%</strong></div>
+        <div class="breakdown-row"><span>Raw Exam Average component (15%):</span><strong>${(rawExamAvg * 0.15).toFixed(2)}%</strong></div>
+        <div class="breakdown-row"><span>Earned bonuses added:</span><strong>+${totalBonus.toFixed(2)}%</strong></div>
       </div>
-    `).join("");
+    `;
 
-    saveState();
+    announceOnce(`Projected grade without the final: ${withoutFinalPct.toFixed(2)} percent, letter grade ${withoutFinalLetter}.`);
   }
 
-  function saveState() {
-    const state = {};
-    Object.keys(DEFAULTS).forEach(k => {
-      const el = document.getElementById(k);
-      state[k] = el.type === "checkbox" ? el.checked : el.value;
-    });
-    try { localStorage.setItem("chem101_calc_v8", JSON.stringify(state)); } catch (e) {}
-  }
-
-  function loadState() {
-    let state = DEFAULTS;
-    try {
-      const saved = localStorage.getItem("chem101_calc_v8");
-      if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
-    } catch (e) {}
-
-    Object.keys(DEFAULTS).forEach(k => {
-      const el = document.getElementById(k);
-      if (el.type === "checkbox") el.checked = Boolean(state[k]);
-      else el.value = state[k];
-    });
-    recalc();
-  }
-
-  function resetDefaults() {
-    try { localStorage.removeItem("chem101_calc_v8"); } catch (e) {}
-    loadState();
-  }
-
-  function clearAll() {
-    Object.keys(DEFAULTS).forEach(k => {
-      const el = document.getElementById(k);
-      if (el.type === "checkbox") el.checked = false;
-      else el.value = "";
-    });
-    recalc();
-  }
-
-  loadState();
+  // Initialize on page load
+  loadStudentState();
+  applyStateToDOM(studentState);
+  recalculate(studentState);
 </script>
 </body>
 </html>
