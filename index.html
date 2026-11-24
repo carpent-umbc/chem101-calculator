@@ -85,7 +85,7 @@
     .btn-clear:hover { background: #dbeafe; }
     .grid {
       display: grid;
-      grid-template-columns: 1.35fr 1fr;
+      grid-template-columns: 1.3fr 1.05fr;
       gap: 20px;
       align-items: start;
     }
@@ -313,12 +313,12 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .option-box {
       border: 2px solid var(--border);
       border-radius: 8px;
-      padding: 14px;
+      padding: 12px;
       text-align: center;
       background: #fff;
       transition: all 0.2s ease;
@@ -328,24 +328,24 @@
       background: var(--accent-soft);
     }
     .opt-title {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .opt-score {
-      font-size: 1.75rem;
+      font-size: 1.55rem;
       font-weight: 800;
       color: #0f172a;
     }
     .opt-letter {
       display: inline-block;
-      margin-top: 4px;
-      padding: 2px 12px;
+      margin-top: 3px;
+      padding: 2px 11px;
       border-radius: 999px;
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       background: #e2e8f0;
       color: #0f172a;
     }
@@ -353,16 +353,93 @@
       background: var(--accent);
       color: #fff;
     }
-    .breakdown-list {
-      font-size: 0.86rem;
+
+    /* DOMINANT TARGET FINAL EXAM SOLVER */
+    .target-hero {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 2px solid #2563eb;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .target-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .target-controls label {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+    select.target-select {
+      padding: 7px 12px;
+      border-radius: 7px;
+      border: 2px solid #2563eb;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .target-big-display {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+      border: 1px solid #bfdbfe;
+    }
+    .target-big-number {
+      font-size: 2.15rem;
+      font-weight: 900;
+      color: #1d4ed8;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .target-big-number.achieved {
+      color: #0f766e;
+      font-size: 1.45rem;
+    }
+    .target-big-number.impossible {
+      color: #b45309;
+      font-size: 1.45rem;
+    }
+    .target-subtext {
+      font-size: 0.88rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    /* COLLAPSIBLE WEIGHTED BREAKDOWN */
+    details.breakdown-toggle {
       border-top: 1px solid var(--border);
       padding-top: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    details.breakdown-toggle summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--muted);
+      user-select: none;
+    }
+    details.breakdown-toggle summary:hover {
+      color: var(--text);
+    }
+    .breakdown-list {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
     }
     .breakdown-row {
       display: flex;
       justify-content: space-between;
-      padding: 4px 0;
+      padding: 3px 0;
     }
+
     .guidance-card {
       background: #f8fafc;
       border-left: 4px solid var(--primary);
@@ -379,26 +456,6 @@
     .guidance-card strong.tip-title {
       display: block;
       margin-bottom: 4px;
-    }
-    .target-solver {
-      background: var(--primary-soft);
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 12px;
-      font-size: 0.86rem;
-    }
-    .target-controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    select {
-      padding: 4px 8px;
-      border-radius: 5px;
-      border: 1px solid #cbd5e1;
-      font-weight: 600;
     }
     .disclaimer {
       font-size: 0.78rem;
@@ -619,25 +676,30 @@
           </div>
         </div>
 
-        <div class="breakdown-list">
-          <div class="breakdown-row"><span>Coursework Contribution (40% max):</span><strong id="outCw">--</strong></div>
-          <div class="breakdown-row"><span>Ranked Regular Exams (45% max):</span><strong id="outEx">--</strong></div>
-          <div class="breakdown-row"><span>Final Exam / Raw Avg (15% max):</span><strong id="outFin">--</strong></div>
-          <div class="breakdown-row"><span>Total Bonus Points Earned:</span><strong id="outBonus" style="color:var(--accent)">--</strong></div>
-        </div>
-
-        <div class="target-solver">
+        <!-- DOMINANT TARGET FINAL EXAM SECTION -->
+        <div class="target-hero">
           <div class="target-controls">
-            <span>What Final Exam score do I need for:</span>
-            <select id="targetGrade" onchange="recalc()">
+            <label for="targetGrade">What Final Exam score do I need for:</label>
+            <select id="targetGrade" class="target-select" onchange="recalc()">
               <option value="90">A (90%)</option>
               <option value="80">B (80%)</option>
               <option value="70">C (70%)</option>
               <option value="60">D (60%)</option>
             </select>
           </div>
-          <div id="targetResult"></div>
+          <div class="target-big-display" id="targetResult"></div>
         </div>
+
+        <!-- COLLAPSIBLE WEIGHTED BREAKDOWN -->
+        <details class="breakdown-toggle">
+          <summary>Show weighted point breakdown (optional)</summary>
+          <div class="breakdown-list">
+            <div class="breakdown-row"><span>Coursework Contribution (40% max):</span><strong id="outCw">--</strong></div>
+            <div class="breakdown-row"><span>Ranked Regular Exams (45% max):</span><strong id="outEx">--</strong></div>
+            <div class="breakdown-row"><span>Final Exam / Raw Avg (15% max):</span><strong id="outFin">--</strong></div>
+            <div class="breakdown-row"><span>Total Bonus Points Earned:</span><strong id="outBonus" style="color:var(--accent)">--</strong></div>
+          </div>
+        </details>
       </div>
 
       <div class="card">
@@ -793,20 +855,33 @@
     document.getElementById("outFin").textContent = `${(finalScore * 0.15).toFixed(2)}% (Opt 1) | ${(rawExamAvg * 0.15).toFixed(2)}% (Opt 2)`;
     document.getElementById("outBonus").textContent = `+${bonusPts.toFixed(2)}% (+${explorationCount}% Checkpoint avg)`;
 
-    // Target Solver
+    // Dominant Target Solver
     const target = parseFloat(document.getElementById("targetGrade").value);
+    const targetLetter = toLetter(target);
     const baseWithoutFinal = cwWeighted + rankedExamPts + bonusPts;
     const neededFinal = (target - baseWithoutFinal) / 0.15;
     const targetEl = document.getElementById("targetResult");
 
     if (opt2 >= target) {
-      targetEl.innerHTML = `You already reach a <strong>${target}% course percentage</strong> under <strong>Option 2</strong> (${opt2.toFixed(2)}%) without needing the Cumulative Final to raise your grade.`;
+      targetEl.innerHTML = `
+        <div class="target-big-number achieved">Already Locked In (Option 2)</div>
+        <div class="target-subtext">Your Option 2 grade is already <strong>${opt2.toFixed(2)}% (${opt2Letter})</strong>, so you do not need the Cumulative Final to reach a <strong>${targetLetter} (${target}%)</strong>.</div>
+      `;
     } else if (neededFinal <= 0) {
-      targetEl.innerHTML = `You have already locked in at least a <strong>${target}% course percentage</strong> regardless of your Final Exam score.`;
+      targetEl.innerHTML = `
+        <div class="target-big-number achieved">0% Needed — Guaranteed</div>
+        <div class="target-subtext">You have already secured at least a <strong>${target}% (${targetLetter})</strong> regardless of your Final Exam score.</div>
+      `;
     } else if (neededFinal > 100) {
-      targetEl.innerHTML = `Reaching a <strong>${target}% course percentage</strong> via Option 1 requires <strong>${neededFinal.toFixed(1)}%</strong> on the Final (above 100%). Focus on maximizing remaining coursework and Exploration bonuses.`;
+      targetEl.innerHTML = `
+        <div class="target-big-number impossible">${neededFinal.toFixed(1)}% Needed (Above 100%)</div>
+        <div class="target-subtext">Even a 100% on the Final Exam puts you at <strong>${(baseWithoutFinal + 15).toFixed(2)}%</strong>. To reach <strong>${targetLetter} (${target}%)</strong>, focus on raising remaining coursework or bonus points.</div>
+      `;
     } else {
-      targetEl.innerHTML = `You need at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with a <strong>${target}% course percentage</strong>.`;
+      targetEl.innerHTML = `
+        <div class="target-big-number">${neededFinal.toFixed(1)}% on Final Exam</div>
+        <div class="target-subtext">Score at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with a <strong>${targetLetter} (${target}%)</strong>.</div>
+      `;
     }
 
     // Guidance Engine ("What should I do?")
@@ -900,13 +975,13 @@
       const el = document.getElementById(k);
       state[k] = el.type === "checkbox" ? el.checked : el.value;
     });
-    try { localStorage.setItem("chem101_calc_v5", JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem("chem101_calc_v6", JSON.stringify(state)); } catch (e) {}
   }
 
   function loadState() {
     let state = DEFAULTS;
     try {
-      const saved = localStorage.getItem("chem101_calc_v5");
+      const saved = localStorage.getItem("chem101_calc_v6");
       if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
     } catch (e) {}
 
@@ -919,7 +994,7 @@
   }
 
   function resetDefaults() {
-    try { localStorage.removeItem("chem101_calc_v5"); } catch (e) {}
+    try { localStorage.removeItem("chem101_calc_v6"); } catch (e) {}
     loadState();
   }
 
