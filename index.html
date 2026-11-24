@@ -488,21 +488,19 @@
           <span class="badge-weight">40% of Course Grade</span>
         </div>
         <details class="descriptor">
-          <summary>How Coursework is Calculated & Auto-Estimated</summary>
+          <summary>How Coursework is Calculated & Where to Find Grades</summary>
           <p>
-            Coursework makes up 40% of your final grade: <strong>Modules 1–21</strong> (10% total, ~0.48% each), <strong>Unit Checkpoints 1–8</strong> (5% total, 0.63% each), <strong>Unit Completions 1–8</strong> (5% total, 0.63% each), and <strong>Discussion</strong> (20%). If you leave upcoming items (Modules 19–21, Checkpoint 8, or Units 7–8) blank, the calculator automatically fills them with your average from the earlier items in that category.
+            Coursework makes up 40% of your final grade: <strong>Modules 1–21</strong> (10% total; Module 1–19 is 19/21 = 9.05%, and Modules 20 &amp; 21 are 1/21 = 0.48% each), <strong>Unit Checkpoints 1–8</strong> (5% total, 0.63% each), <strong>Unit Completions 1–8</strong> (5% total, 0.63% each), and <strong>Discussion</strong> (20%).
+          </p>
+          <p>
+            You can find your current <strong>Module 1–19 Completion Avg</strong>, <strong>Unit 1–7 Checkpoint Avg</strong>, and <strong>Discussion</strong> grades directly in your <strong>Blackboard grades</strong>. If you leave upcoming items (Modules 20–21, Checkpoint 8, or Units 7–8) blank, the calculator automatically fills them with your average from the earlier items in that category.
           </p>
         </details>
 
         <div class="row-item">
-          <div><span class="item-label">Module 1–18 Completion Avg</span><span class="item-sub">18 modules combined</span></div>
-          <div class="item-weight">8.57%</div>
-          <input type="number" id="mod1_18" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
-        </div>
-        <div class="row-item">
-          <div><span class="item-label">Module 19 Completion</span><span class="item-sub" id="hint_mod19"></span></div>
-          <div class="item-weight">0.48%</div>
-          <input type="number" id="mod19" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+          <div><span class="item-label">Module 1–19 Completion Avg</span><span class="item-sub">19 modules combined (19/21 weight) — found in Blackboard grades</span></div>
+          <div class="item-weight">9.05%</div>
+          <input type="number" id="mod1_19" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
         </div>
         <div class="row-item">
           <div><span class="item-label">Module 20 Completion</span><span class="item-sub" id="hint_mod20"></span></div>
@@ -516,7 +514,7 @@
         </div>
 
         <div class="row-item">
-          <div><span class="item-label">Unit 1–7 Checkpoint Avg</span><span class="item-sub">7 checkpoints combined (before Exploration bonus)</span></div>
+          <div><span class="item-label">Unit 1–7 Checkpoint Avg</span><span class="item-sub">Found in Blackboard grades (before Exploration bonus)</span></div>
           <div class="item-weight">4.38%</div>
           <input type="number" id="cp1_7" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
         </div>
@@ -543,7 +541,7 @@
         </div>
 
         <div class="row-item">
-          <div><span class="item-label">Discussion</span><span class="item-sub">High-impact single category</span></div>
+          <div><span class="item-label">Discussion</span><span class="item-sub">Found in Blackboard grades (high-impact category)</span></div>
           <div class="item-weight">20.00%</div>
           <input type="number" id="discussion" min="0" max="100" step="0.01" placeholder="0–100" oninput="recalc()" />
         </div>
@@ -715,7 +713,7 @@
 
 <script>
   const DEFAULTS = {
-    mod1_18: 95, mod19: "", mod20: "", mod21: "",
+    mod1_19: 95.24, mod20: "", mod21: "",
     cp1_7: 79.85, cp8: "",
     uc1_6: 90, uc7: "", uc8: "",
     discussion: 77.15,
@@ -764,11 +762,10 @@
   }
 
   function recalc() {
-    // Coursework
-    const m1_18 = getNum("mod1_18") ?? 0;
-    const m19 = resolveField("mod19", m1_18, "hint_mod19");
-    const m20 = resolveField("mod20", m1_18, "hint_mod20");
-    const m21 = resolveField("mod21", m1_18, "hint_mod21");
+    // Coursework: Module 1-19 is 19/21 of the 10% Module weight (19/210); Modules 20 & 21 are 1/21 each (1/210)
+    const m1_19 = getNum("mod1_19") ?? 0;
+    const m20 = resolveField("mod20", m1_19, "hint_mod20");
+    const m21 = resolveField("mod21", m1_19, "hint_mod21");
 
     const cp1_7 = getNum("cp1_7") ?? 0;
     const cp8 = resolveField("cp8", cp1_7, "hint_cp8");
@@ -794,8 +791,8 @@
     const bonusPts = explorationCourseBonus + surveyCourseBonus;
 
     const cwWeighted =
-      m1_18 * (18 / 210) +
-      (m19 + m20 + m21) * (1 / 210) +
+      m1_19 * (19 / 210) +
+      (m20 + m21) * (1 / 210) +
       cp1_7 * 0.04375 +
       cp8 * 0.00625 +
       uc1_6 * 0.0375 +
@@ -967,13 +964,13 @@
       const el = document.getElementById(k);
       state[k] = el.type === "checkbox" ? el.checked : el.value;
     });
-    try { localStorage.setItem("chem101_calc_v7", JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem("chem101_calc_v8", JSON.stringify(state)); } catch (e) {}
   }
 
   function loadState() {
     let state = DEFAULTS;
     try {
-      const saved = localStorage.getItem("chem101_calc_v7");
+      const saved = localStorage.getItem("chem101_calc_v8");
       if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
     } catch (e) {}
 
@@ -986,7 +983,7 @@
   }
 
   function resetDefaults() {
-    try { localStorage.removeItem("chem101_calc_v7"); } catch (e) {}
+    try { localStorage.removeItem("chem101_calc_v8"); } catch (e) {}
     loadState();
   }
 
