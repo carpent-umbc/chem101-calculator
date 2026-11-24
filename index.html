@@ -376,9 +376,9 @@
       border-left-color: var(--warn-border);
       color: var(--warn-text);
     }
-    .guidance-card strong {
+    .guidance-card strong.tip-title {
       display: block;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     .target-solver {
       background: var(--primary-soft);
@@ -642,7 +642,7 @@
 
       <div class="card">
         <div class="card-header">
-          <h2>Personalized Student Guidance</h2>
+          <h2>What should I do?</h2>
         </div>
         <div id="guidanceContainer"></div>
         <p class="disclaimer">This tool provides an unofficial projection based on your entered scores. Always verify official grades and your raw exam average in Blackboard.</p>
@@ -768,6 +768,8 @@
     // Options
     const opt1 = cwWeighted + rankedExamPts + finalScore * 0.15 + bonusPts;
     const opt2 = cwWeighted + rankedExamPts + rawExamAvg * 0.15 + bonusPts;
+    const opt2Letter = toLetter(opt2);
+    const opt1Letter = toLetter(opt1);
 
     // Render Pills
     document.getElementById("rankPills").innerHTML = `
@@ -779,9 +781,9 @@
 
     // Render Results
     document.getElementById("opt1Score").textContent = opt1.toFixed(2) + "%";
-    document.getElementById("opt1Letter").textContent = toLetter(opt1);
+    document.getElementById("opt1Letter").textContent = opt1Letter;
     document.getElementById("opt2Score").textContent = opt2.toFixed(2) + "%";
-    document.getElementById("opt2Letter").textContent = toLetter(opt2);
+    document.getElementById("opt2Letter").textContent = opt2Letter;
 
     document.getElementById("boxOpt1").classList.toggle("winner", opt1 > opt2);
     document.getElementById("boxOpt2").classList.toggle("winner", opt2 >= opt1);
@@ -798,16 +800,16 @@
     const targetEl = document.getElementById("targetResult");
 
     if (opt2 >= target) {
-      targetEl.innerHTML = `You already reach <strong>${target}%</strong> under <strong>Option 2</strong> (${opt2.toFixed(2)}%) without needing the Cumulative Final to raise your grade.`;
+      targetEl.innerHTML = `You already reach a <strong>${target}% course percentage</strong> under <strong>Option 2</strong> (${opt2.toFixed(2)}%) without needing the Cumulative Final to raise your grade.`;
     } else if (neededFinal <= 0) {
-      targetEl.innerHTML = `You have already locked in at least <strong>${target}%</strong> regardless of your Final Exam score.`;
+      targetEl.innerHTML = `You have already locked in at least a <strong>${target}% course percentage</strong> regardless of your Final Exam score.`;
     } else if (neededFinal > 100) {
-      targetEl.innerHTML = `Reaching <strong>${target}%</strong> via Option 1 requires <strong>${neededFinal.toFixed(1)}%</strong> on the Final (above 100%). Focus on maximizing remaining coursework and Exploration bonuses.`;
+      targetEl.innerHTML = `Reaching a <strong>${target}% course percentage</strong> via Option 1 requires <strong>${neededFinal.toFixed(1)}%</strong> on the Final (above 100%). Focus on maximizing remaining coursework and Exploration bonuses.`;
     } else {
-      targetEl.innerHTML = `You need at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with <strong>${target}%</strong>.`;
+      targetEl.innerHTML = `You need at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with a <strong>${target}% course percentage</strong>.`;
     }
 
-    // Guidance Engine
+    // Guidance Engine ("What should I do?")
     const tips = [];
     const finalEntered = getNum("finalExam") !== null;
     const rawEntered = getNum("rawExamAvgInput") !== null;
@@ -815,22 +817,45 @@
     if (!rawEntered) {
       tips.push({
         type: "warn",
-        title: "Action Needed: Enter Your Raw Exam Average from Blackboard",
+        title: "Enter Your Raw Exam Average from Blackboard",
         body: "Because Exams 1–3 include exam bonus points, look up your official Raw Exam Average in your Blackboard grades and enter it in the blue box to see your accurate Option 2 grade."
       });
     }
 
+    // Determine next letter grade threshold above Option 2
+    let nextThreshold = null;
+    let nextLetter = null;
+    if (opt2 < 60) { nextThreshold = 60; nextLetter = "D"; }
+    else if (opt2 < 70) { nextThreshold = 70; nextLetter = "C"; }
+    else if (opt2 < 80) { nextThreshold = 80; nextLetter = "B"; }
+    else if (opt2 < 90) { nextThreshold = 90; nextLetter = "A"; }
+
     if (!finalEntered) {
+      let letterNote = "";
+      if (nextThreshold === null) {
+        letterNote = `Because Option 2 already puts you at <strong>${opt2.toFixed(2)}% (Letter Grade: A)</strong>, taking the Final Exam cannot raise your letter grade further.`;
+      } else {
+        const reqForNextLetter = (nextThreshold - baseWithoutFinal) / 0.15;
+        if (reqForNextLetter <= 100) {
+          letterNote = `To move up from a letter grade of <strong>${opt2Letter}</strong> to <strong>${nextLetter} (${nextThreshold}%)</strong>, you would need at least <strong>${reqForNextLetter.toFixed(1)}%</strong> on the Cumulative Final Exam.`;
+        } else {
+          letterNote = `Note: Even with 100% on the Cumulative Final Exam (which yields ${(baseWithoutFinal + 15).toFixed(2)}%), your overall course percentage would remain below the ${nextThreshold}% cutoff for a letter grade of <strong>${nextLetter}</strong> unless you also raise your coursework or bonus points.`;
+        }
+      }
+
       tips.push({
         type: "info",
         title: "Should you take the Cumulative Final Exam?",
-        body: `Right now, Option 2 (replacing the final with your ${rawExamAvg.toFixed(2)}% raw exam average) gives you ${opt2.toFixed(2)}% (${toLetter(opt2)}). Taking the Final Exam will only improve your grade if you score higher than ${rawExamAvg.toFixed(1)}%.`
+        body: `Under Option 2, replacing the final with your ${rawExamAvg.toFixed(2)}% Raw Exam Average gives you an overall course percentage of <strong>${opt2.toFixed(2)}% (Letter Grade: ${opt2Letter})</strong>. Scoring above <strong>${rawExamAvg.toFixed(1)}%</strong> on the Cumulative Final will increase your overall <em>course percentage</em>, while scoring below it leaves your Option 2 percentage unchanged. ${letterNote}`
       });
     } else if (opt1 > opt2) {
+      const letterMsg = opt1Letter !== opt2Letter
+        ? `and raises your letter grade from <strong>${opt2Letter}</strong> to <strong>${opt1Letter}</strong>.`
+        : `though your letter grade remains <strong>${opt1Letter}</strong>.`;
       tips.push({
         type: "info",
-        title: "Option 1 Boosts Your Grade",
-        body: `Your Final Exam score (${finalScore.toFixed(1)}%) beats your raw exam average (${rawExamAvg.toFixed(2)}%), lifting your overall grade by +${(opt1 - opt2).toFixed(2)}%.`
+        title: "Option 1 Raises Your Course Percentage",
+        body: `Your Final Exam score (${finalScore.toFixed(1)}%) beats your Raw Exam Average (${rawExamAvg.toFixed(2)}%), increasing your overall course percentage by +${(opt1 - opt2).toFixed(2)}% (to <strong>${opt1.toFixed(2)}%</strong>) ${letterMsg}`
       });
     }
 
@@ -839,7 +864,7 @@
       tips.push({
         type: "warn",
         title: `${remainingExp} Exploration Bonus${remainingExp > 1 ? "es" : ""} Remaining (Due Dec 9, 11:59 PM)`,
-        body: `You have up to 5 attempts per Exploration in REAL CHEM (Units 1, 4, 6, and 8). Scoring 95% or higher on each remaining Exploration adds +1% to your Unit Checkpoint average (+${(remainingExp * 0.05).toFixed(2)}% to your overall course grade).`
+        body: `You have up to 5 attempts per Exploration in REAL CHEM (Units 1, 4, 6, and 8). Scoring 95% or higher on each remaining Exploration adds +1% to your Unit Checkpoint average (+${(remainingExp * 0.05).toFixed(2)}% to your overall course percentage).`
       });
     }
 
@@ -847,7 +872,7 @@
       tips.push({
         type: "warn",
         title: `Unclaimed Survey Bonus (+${(1.00 - surveyCourseBonus).toFixed(2)}% Available)`,
-        body: "Completing the Pre-Survey and Post-Survey adds +0.50% each directly onto your final course grade."
+        body: "Completing the Pre-Survey and Post-Survey adds +0.50% each directly onto your overall course percentage."
       });
     }
 
@@ -861,7 +886,7 @@
 
     document.getElementById("guidanceContainer").innerHTML = tips.map(t => `
       <div class="guidance-card ${t.type === "warn" ? "warn" : ""}">
-        <strong>${t.title}</strong>
+        <strong class="tip-title">${t.title}</strong>
         <span>${t.body}</span>
       </div>
     `).join("");
@@ -875,13 +900,13 @@
       const el = document.getElementById(k);
       state[k] = el.type === "checkbox" ? el.checked : el.value;
     });
-    try { localStorage.setItem("chem101_calc_v4", JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem("chem101_calc_v5", JSON.stringify(state)); } catch (e) {}
   }
 
   function loadState() {
     let state = DEFAULTS;
     try {
-      const saved = localStorage.getItem("chem101_calc_v4");
+      const saved = localStorage.getItem("chem101_calc_v5");
       if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
     } catch (e) {}
 
@@ -894,7 +919,7 @@
   }
 
   function resetDefaults() {
-    try { localStorage.removeItem("chem101_calc_v4"); } catch (e) {}
+    try { localStorage.removeItem("chem101_calc_v5"); } catch (e) {}
     loadState();
   }
 
