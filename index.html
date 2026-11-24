@@ -107,7 +107,7 @@
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 8px 12px;
+      padding: 9px 12px;
       margin-bottom: 14px;
       font-size: 0.85rem;
       color: #334155;
@@ -121,15 +121,44 @@
     details.descriptor p {
       margin: 8px 0 0 0;
     }
+    .syllabus-box {
+      background: var(--primary-soft);
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+    }
+    .syllabus-box strong.box-title {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      color: #172554;
+    }
+    .syllabus-box ul {
+      margin: 6px 0 0 0;
+      padding-left: 18px;
+    }
+    .syllabus-box li {
+      margin-bottom: 2px;
+    }
     .row-item {
       display: grid;
-      grid-template-columns: 1fr 95px 110px;
+      grid-template-columns: 1fr 105px 110px;
       gap: 10px;
       align-items: center;
       padding: 8px 0;
       border-bottom: 1px solid #f1f5f9;
     }
     .row-item:last-child { border-bottom: none; }
+    .row-item.highlight-row {
+      background: #f8fafc;
+      margin: 4px -8px;
+      padding: 10px 8px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
     .item-label {
       font-size: 0.9rem;
       font-weight: 500;
@@ -140,7 +169,7 @@
       color: var(--muted);
     }
     .item-weight {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--muted);
       text-align: right;
     }
@@ -183,6 +212,14 @@
       padding: 4px 8px;
       font-size: 0.8rem;
     }
+    .bonus-section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin: 12px 0 6px 0;
+    }
     .bonus-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -198,12 +235,14 @@
       border-radius: 6px;
       font-size: 0.86rem;
       cursor: pointer;
+      gap: 10px;
     }
     .bonus-item input {
       width: 16px;
       height: 16px;
       margin-right: 8px;
       accent-color: var(--accent);
+      flex-shrink: 0;
     }
     .bonus-left {
       display: flex;
@@ -212,7 +251,9 @@
     .bonus-pts {
       font-weight: 700;
       color: var(--accent);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      text-align: right;
+      white-space: nowrap;
     }
     .sticky-col {
       position: sticky;
@@ -365,7 +406,7 @@
         </div>
 
         <div class="row-item">
-          <div><span class="item-label">Unit 1–7 Checkpoint Avg</span><span class="item-sub">7 checkpoints combined</span></div>
+          <div><span class="item-label">Unit 1–7 Checkpoint Avg</span><span class="item-sub">7 checkpoints combined (before Exploration bonus)</span></div>
           <div class="item-weight">4.38%</div>
           <input type="number" id="cp1_7" min="0" max="100" step="0.01" oninput="recalc()" />
         </div>
@@ -405,27 +446,40 @@
           <span class="badge-weight">60% of Course Grade</span>
         </div>
         <details class="descriptor">
-          <summary>How Exam Ranking & Option 1 vs. Option 2 Work</summary>
+          <summary>Why Raw Exam Average Differs from Exams 1–3 (Option 1 vs. Option 2)</summary>
           <p>
-            Your 3 regular exams (45% total) are automatically sorted from highest to lowest: your <strong>highest exam counts 20%</strong>, your <strong>middle exam counts 15%</strong>, and your <strong>lowest exam counts 10%</strong>. For the remaining 15%, <strong>Option 1</strong> uses your Cumulative Final Exam score, whereas <strong>Option 2</strong> replaces the Final Exam with your raw unweighted average across Exams 1–3.
+            Your <strong>Exams 1–3</strong> (which include exam bonus points) are ranked from highest to lowest for 45% of your course grade: <strong>highest = 20%</strong>, <strong>middle = 15%</strong>, and <strong>lowest = 10%</strong>.
+          </p>
+          <p>
+            For the remaining 15%, <strong>Option 1</strong> uses your Cumulative Final Exam score, whereas <strong>Option 2</strong> uses your <strong>Raw Exam Average</strong> (the unweighted average of your raw exam scores <em>without</em> exam bonus points), which is listed directly in your <strong>Blackboard grades</strong>.
           </p>
         </details>
 
         <div class="row-item">
-          <div><span class="item-label">Exam 1</span><span class="item-sub" id="hint_ex1"></span></div>
+          <div><span class="item-label">Exam 1 (with exam bonus)</span><span class="item-sub" id="hint_ex1"></span></div>
           <div class="item-weight">Auto-ranked</div>
           <input type="number" id="exam1" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
         </div>
         <div class="row-item">
-          <div><span class="item-label">Exam 2</span><span class="item-sub" id="hint_ex2"></span></div>
+          <div><span class="item-label">Exam 2 (with exam bonus)</span><span class="item-sub" id="hint_ex2"></span></div>
           <div class="item-weight">Auto-ranked</div>
           <input type="number" id="exam2" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
         </div>
         <div class="row-item">
-          <div><span class="item-label">Exam 3</span><span class="item-sub" id="hint_ex3"></span></div>
+          <div><span class="item-label">Exam 3 (with exam bonus)</span><span class="item-sub" id="hint_ex3"></span></div>
           <div class="item-weight">Auto-ranked</div>
           <input type="number" id="exam3" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
         </div>
+
+        <div class="row-item highlight-row">
+          <div>
+            <span class="item-label">Raw Exam Average (from Blackboard)</span>
+            <span class="item-sub" id="hint_raw">Found in Blackboard grades (excludes exam bonus points)</span>
+          </div>
+          <div class="item-weight">15.00% (Opt 2)</div>
+          <input type="number" id="rawExamAvgInput" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+
         <div class="row-item">
           <div><span class="item-label">Cumulative Final Exam</span><span class="item-sub" id="hint_final"></span></div>
           <div class="item-weight">15.00% (Opt 1)</div>
@@ -433,7 +487,7 @@
         </div>
 
         <div class="exam-rank-box">
-          <strong>Live Exam Ranking & Raw Average:</strong>
+          <strong>Live Exam Ranking (45% Total):</strong>
           <div class="rank-pills" id="rankPills"></div>
         </div>
       </div>
@@ -442,39 +496,47 @@
       <div class="card">
         <div class="card-header">
           <h2>3. Bonus Opportunities</h2>
-          <span class="badge-weight">Up to +1.20% Direct Boost</span>
+          <span class="badge-weight">Up to +1.20% Course Boost</span>
         </div>
-        <details class="descriptor">
-          <summary>How Bonus Points Add to Your Grade</summary>
-          <p>
-            Bonus items add directly onto your final course percentage in both Option 1 and Option 2. Completing the Pre-Survey or Post-Survey earns <strong>+0.50%</strong> each (5 pts × 10% weight), and each Unit Climate/Energy bonus earns <strong>+0.05%</strong> (1 pt × 5% weight).
-          </p>
-        </details>
 
+        <div class="syllabus-box">
+          <strong class="box-title">What is the Exploration Bonus? (From Syllabus)</strong>
+          You can complete <strong>Explorations</strong> to earn bonus points toward your <strong>Unit Checkpoint</strong> score. For each Exploration completed with a score of <strong>95% or higher</strong>, <strong>+1% point</strong> is added to your Unit Checkpoint average (which adds <strong>+0.05%</strong> to your overall course grade, up to +0.20% across all four).
+          <ul>
+            <li><strong>Where to find them:</strong> Offered only in Units 1, 4, 6, and 8 in <strong>REAL CHEM</strong>.</li>
+            <li><strong>Attempts & Deadline:</strong> You have <strong>5 attempts</strong> for each Exploration. Due <strong>December 9th at 11:59 PM</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="bonus-section-label">Exploration Bonuses (95%+ Required in REAL CHEM — Due Dec 9, 11:59 PM)</div>
         <div class="bonus-grid">
           <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_pre" onchange="recalc()" /> Pre-Survey Bonus (5 pts)</span>
-            <span class="bonus-pts">+0.50%</span>
-          </label>
-          <label class="bonus-item">
-            <span class="bonus-left"><input type="checkbox" id="b_post" onchange="recalc()" /> Post-Survey Bonus (5 pts)</span>
-            <span class="bonus-pts">+0.50%</span>
-          </label>
-          <label class="bonus-item">
             <span class="bonus-left"><input type="checkbox" id="b_u1" onchange="recalc()" /> Unit 1: Modeling Uncertainty in a Changing Climate</span>
-            <span class="bonus-pts">+0.05%</span>
+            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
           </label>
           <label class="bonus-item">
             <span class="bonus-left"><input type="checkbox" id="b_u4" onchange="recalc()" /> Unit 4: Decoding the Mystery of Greenhouse Molecules</span>
-            <span class="bonus-pts">+0.05%</span>
+            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
           </label>
           <label class="bonus-item">
             <span class="bonus-left"><input type="checkbox" id="b_u6" onchange="recalc()" /> Unit 6: Driving Down Greenhouse Emissions</span>
-            <span class="bonus-pts">+0.05%</span>
+            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
           </label>
           <label class="bonus-item">
             <span class="bonus-left"><input type="checkbox" id="b_u8" onchange="recalc()" /> Unit 8: What’s Our Next Big Energy Source?</span>
-            <span class="bonus-pts">+0.05%</span>
+            <span class="bonus-pts">+1% Checkpoint (+0.05% Course)</span>
+          </label>
+        </div>
+
+        <div class="bonus-section-label">Course Survey Bonuses (Direct Course Grade Boost)</div>
+        <div class="bonus-grid">
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_pre" onchange="recalc()" /> Pre-Survey Bonus (5 pts)</span>
+            <span class="bonus-pts">+0.50% Course</span>
+          </label>
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_post" onchange="recalc()" /> Post-Survey Bonus (5 pts)</span>
+            <span class="bonus-pts">+0.50% Course</span>
           </label>
         </div>
       </div>
@@ -495,7 +557,7 @@
             <div class="opt-letter" id="opt1Letter">-</div>
           </div>
           <div class="option-box" id="boxOpt2">
-            <div class="opt-title">Option 2: Exam Avg</div>
+            <div class="opt-title">Option 2: Raw Exam Avg</div>
             <div class="opt-score" id="opt2Score">--%</div>
             <div class="opt-letter" id="opt2Letter">-</div>
           </div>
@@ -504,7 +566,7 @@
         <div class="breakdown-list">
           <div class="breakdown-row"><span>Coursework Contribution (40% max):</span><strong id="outCw">--</strong></div>
           <div class="breakdown-row"><span>Ranked Regular Exams (45% max):</span><strong id="outEx">--</strong></div>
-          <div class="breakdown-row"><span>Final Exam / Replacement (15% max):</span><strong id="outFin">--</strong></div>
+          <div class="breakdown-row"><span>Final Exam / Raw Avg (15% max):</span><strong id="outFin">--</strong></div>
           <div class="breakdown-row"><span>Total Bonus Points Earned:</span><strong id="outBonus" style="color:var(--accent)">--</strong></div>
         </div>
 
@@ -527,7 +589,7 @@
           <h2>Personalized Student Guidance</h2>
         </div>
         <div id="guidanceContainer"></div>
-        <p class="disclaimer">This tool provides an unofficial projection based on your entered scores. Always verify official grades in Blackboard.</p>
+        <p class="disclaimer">This tool provides an unofficial projection based on your entered scores. Always verify official grades and your raw exam average in Blackboard.</p>
       </div>
     </div>
   </div>
@@ -539,7 +601,9 @@
     cp1_7: 79.85, cp8: "",
     uc1_6: 90, uc7: "", uc8: "",
     discussion: 77.15,
-    exam1: 83, exam2: 74, exam3: 86, finalExam: "",
+    exam1: 83, exam2: 74, exam3: 86,
+    rawExamAvgInput: 78.67,
+    finalExam: "",
     b_pre: true, b_post: true, b_u1: true, b_u4: true, b_u6: true, b_u8: true
   };
 
@@ -558,17 +622,18 @@
     return "F";
   }
 
-  function resolveField(id, fallback, hintId) {
+  function resolveField(id, fallback, hintId, autoPrefix = "Auto-estimated at") {
     const el = document.getElementById(id);
     const hintEl = document.getElementById(hintId);
     const val = getNum(id);
     if (val === null) {
       el.classList.add("is-auto");
-      if (hintEl) hintEl.textContent = `Auto-estimated at ${fallback.toFixed(2)}%`;
+      if (hintEl) hintEl.textContent = `${autoPrefix} ${fallback.toFixed(2)}%`;
       return fallback;
     } else {
       el.classList.remove("is-auto");
-      if (hintEl) hintEl.textContent = "Entered score";
+      if (hintEl && id !== "rawExamAvgInput") hintEl.textContent = "Entered score";
+      if (hintEl && id === "rawExamAvgInput") hintEl.textContent = "Entered from Blackboard grades";
       return val;
     }
   }
@@ -588,6 +653,20 @@
     const uc8 = resolveField("uc8", uc1_6, "hint_uc8");
 
     const disc = getNum("discussion") ?? 0;
+
+    // Exploration Bonus: +1% to Unit Checkpoint average per Exploration (95%+) -> +0.05% course grade each
+    const explorationCount =
+      (document.getElementById("b_u1").checked ? 1 : 0) +
+      (document.getElementById("b_u4").checked ? 1 : 0) +
+      (document.getElementById("b_u6").checked ? 1 : 0) +
+      (document.getElementById("b_u8").checked ? 1 : 0);
+
+    const explorationCourseBonus = explorationCount * 0.05;
+    const surveyCourseBonus =
+      (document.getElementById("b_pre").checked ? 0.50 : 0) +
+      (document.getElementById("b_post").checked ? 0.50 : 0);
+
+    const bonusPts = explorationCourseBonus + surveyCourseBonus;
 
     const cwWeighted =
       m1_18 * (18 / 210) +
@@ -619,17 +698,15 @@
       sortedExams[1].score * 0.15 +
       sortedExams[2].score * 0.10;
 
-    const rawExamAvg = (e1 + e2 + e3) / 3;
-    const finalScore = resolveField("finalExam", rawExamAvg, "hint_final");
+    const calcExamAvg = (e1 + e2 + e3) / 3;
+    const rawExamAvg = resolveField(
+      "rawExamAvgInput",
+      calcExamAvg,
+      "hint_raw",
+      "Blank — using Exams 1–3 avg:"
+    );
 
-    // Bonus
-    const bonusPts =
-      (document.getElementById("b_pre").checked ? 0.50 : 0) +
-      (document.getElementById("b_post").checked ? 0.50 : 0) +
-      (document.getElementById("b_u1").checked ? 0.05 : 0) +
-      (document.getElementById("b_u4").checked ? 0.05 : 0) +
-      (document.getElementById("b_u6").checked ? 0.05 : 0) +
-      (document.getElementById("b_u8").checked ? 0.05 : 0);
+    const finalScore = resolveField("finalExam", rawExamAvg, "hint_final", "Blank — using Raw Exam Avg:");
 
     // Options
     const opt1 = cwWeighted + rankedExamPts + finalScore * 0.15 + bonusPts;
@@ -655,7 +732,7 @@
     document.getElementById("outCw").textContent = `${cwWeighted.toFixed(2)} / 40.00%`;
     document.getElementById("outEx").textContent = `${rankedExamPts.toFixed(2)} / 45.00%`;
     document.getElementById("outFin").textContent = `${(finalScore * 0.15).toFixed(2)}% (Opt 1) | ${(rawExamAvg * 0.15).toFixed(2)}% (Opt 2)`;
-    document.getElementById("outBonus").textContent = `+${bonusPts.toFixed(2)}%`;
+    document.getElementById("outBonus").textContent = `+${bonusPts.toFixed(2)}% (+${explorationCount}% Checkpoint avg)`;
 
     // Target Solver
     const target = parseFloat(document.getElementById("targetGrade").value);
@@ -668,7 +745,7 @@
     } else if (neededFinal <= 0) {
       targetEl.innerHTML = `You have already locked in at least <strong>${target}%</strong> regardless of your Final Exam score.`;
     } else if (neededFinal > 100) {
-      targetEl.innerHTML = `Reaching <strong>${target}%</strong> via Option 1 requires <strong>${neededFinal.toFixed(1)}%</strong> on the Final (above 100%). Focus on maximizing remaining coursework and bonus points.`;
+      targetEl.innerHTML = `Reaching <strong>${target}%</strong> via Option 1 requires <strong>${neededFinal.toFixed(1)}%</strong> on the Final (above 100%). Focus on maximizing remaining coursework and Exploration bonuses.`;
     } else {
       targetEl.innerHTML = `You need at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with <strong>${target}%</strong>.`;
     }
@@ -676,6 +753,15 @@
     // Guidance Engine
     const tips = [];
     const finalEntered = getNum("finalExam") !== null;
+    const rawEntered = getNum("rawExamAvgInput") !== null;
+
+    if (!rawEntered) {
+      tips.push({
+        type: "warn",
+        title: "Enter Your Raw Exam Average from Blackboard",
+        body: "Because Exams 1–3 include exam bonus points, look up your official Raw Exam Average in your Blackboard grades and enter it above for an accurate Option 2 estimate."
+      });
+    }
 
     if (!finalEntered) {
       tips.push({
@@ -687,15 +773,24 @@
       tips.push({
         type: "info",
         title: "Option 1 Boosts Your Grade",
-        body: `Your Final Exam score (${finalScore.toFixed(1)}%) beats your regular exam average (${rawExamAvg.toFixed(2)}%), lifting your overall grade by +${(opt1 - opt2).toFixed(2)}%.`
+        body: `Your Final Exam score (${finalScore.toFixed(1)}%) beats your raw exam average (${rawExamAvg.toFixed(2)}%), lifting your overall grade by +${(opt1 - opt2).toFixed(2)}%.`
       });
     }
 
-    if (bonusPts < 1.20) {
+    if (explorationCount < 4) {
+      const remainingExp = 4 - explorationCount;
       tips.push({
         type: "warn",
-        title: `Unclaimed Bonus Points (+${(1.20 - bonusPts).toFixed(2)}% Available)`,
-        body: "You still have unchecked survey or unit climate/energy bonus items. Because bonus points add directly to your final percentage, completing them is the easiest way to cross a letter-grade boundary."
+        title: `${remainingExp} Exploration Bonus${remainingExp > 1 ? "es" : ""} Remaining (Due Dec 9, 11:59 PM)`,
+        body: `You have up to 5 attempts per Exploration in REAL CHEM (Units 1, 4, 6, and 8). Scoring 95% or higher on each remaining Exploration adds +1% to your Unit Checkpoint average (+${(remainingExp * 0.05).toFixed(2)}% to your overall course grade).`
+      });
+    }
+
+    if (surveyCourseBonus < 1.00) {
+      tips.push({
+        type: "warn",
+        title: `Unclaimed Survey Bonus (+${(1.00 - surveyCourseBonus).toFixed(2)}% Available)`,
+        body: "Completing the Pre-Survey and Post-Survey adds +0.50% each directly onto your final course grade."
       });
     }
 
@@ -723,13 +818,13 @@
       const el = document.getElementById(k);
       state[k] = el.type === "checkbox" ? el.checked : el.value;
     });
-    try { localStorage.setItem("chem101_calc_v1", JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem("chem101_calc_v3", JSON.stringify(state)); } catch (e) {}
   }
 
   function loadState() {
     let state = DEFAULTS;
     try {
-      const saved = localStorage.getItem("chem101_calc_v1");
+      const saved = localStorage.getItem("chem101_calc_v3");
       if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
     } catch (e) {}
 
@@ -742,7 +837,7 @@
   }
 
   function resetDefaults() {
-    try { localStorage.removeItem("chem101_calc_v1"); } catch (e) {}
+    try { localStorage.removeItem("chem101_calc_v3"); } catch (e) {}
     loadState();
   }
 
