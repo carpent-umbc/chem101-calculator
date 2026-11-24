@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FA26 CHEM 101 | Final Grade Estimator & Decision Guide</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --border: #dce2ec;
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #1d4ed8;
+      --primary-soft: #eff6ff;
+      --accent: #0f766e;
+      --accent-soft: #f0fdfa;
+      --warn-bg: #fffbeb;
+      --warn-border: #f59e0b;
+      --warn-text: #92400e;
+      --auto-bg: #f1f5f9;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 {
+      margin: 0 0 4px 0;
+      font-size: 1.35rem;
+      color: #0f172a;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .btn-reset {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .btn-reset:hover { background: #f8fafc; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 880px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+    .badge-weight {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    details.descriptor {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      color: #334155;
+    }
+    details.descriptor summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--primary);
+      user-select: none;
+    }
+    details.descriptor p {
+      margin: 8px 0 0 0;
+    }
+    .row-item {
+      display: grid;
+      grid-template-columns: 1fr 95px 110px;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .row-item:last-child { border-bottom: none; }
+    .item-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .item-sub {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .item-weight {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: right;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 7px 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      text-align: right;
+      font-weight: 600;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
+    }
+    input.is-auto {
+      background: var(--auto-bg);
+      color: #475569;
+    }
+    .exam-rank-box {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 12px;
+      font-size: 0.84rem;
+    }
+    .rank-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .pill {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+    }
+    .bonus-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .bonus-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+    .bonus-item input {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      accent-color: var(--accent);
+    }
+    .bonus-left {
+      display: flex;
+      align-items: center;
+    }
+    .bonus-pts {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.82rem;
+    }
+    .sticky-col {
+      position: sticky;
+      top: 16px;
+    }
+    .options-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .option-box {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      background: #fff;
+      transition: all 0.2s ease;
+    }
+    .option-box.winner {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .opt-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .opt-score {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .opt-letter {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .option-box.winner .opt-letter {
+      background: var(--accent);
+      color: #fff;
+    }
+    .breakdown-list {
+      font-size: 0.86rem;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+    .guidance-card {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 0.88rem;
+    }
+    .guidance-card.warn {
+      background: var(--warn-bg);
+      border-left-color: var(--warn-border);
+      color: var(--warn-text);
+    }
+    .guidance-card strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+    .target-solver {
+      background: var(--primary-soft);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 0.86rem;
+    }
+    .target-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    select {
+      padding: 4px 8px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+    .disclaimer {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>FA26 CHEM 101 — Final Grade Estimator & Decision Guide</h1>
+      <p>Enter scores from 0–100. Leave upcoming items blank to auto-estimate from your current category average.</p>
+    </div>
+    <button class="btn-reset" onclick="resetDefaults()">Reset to Sample Data</button>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT COLUMN: INPUTS & DESCRIPTORS -->
+    <div>
+      <!-- COURSEWORK -->
+      <div class="card">
+        <div class="card-header">
+          <h2>1. Coursework Assignments</h2>
+          <span class="badge-weight">40% of Course Grade</span>
+        </div>
+        <details class="descriptor">
+          <summary>How Coursework is Calculated & Auto-Estimated</summary>
+          <p>
+            Coursework makes up 40% of your final grade: <strong>Modules 1–21</strong> (10% total, ~0.48% each), <strong>Unit Checkpoints 1–8</strong> (5% total, 0.63% each), <strong>Unit Completions 1–8</strong> (5% total, 0.63% each), and <strong>Discussion</strong> (20%). If you leave upcoming items (Modules 19–21, Checkpoint 8, or Units 7–8) blank, the calculator automatically fills them with your average from the earlier items in that category.
+          </p>
+        </details>
+
+        <div class="row-item">
+          <div><span class="item-label">Module 1–18 Completion Avg</span><span class="item-sub">18 modules combined</span></div>
+          <div class="item-weight">8.57%</div>
+          <input type="number" id="mod1_18" min="0" max="100" step="0.01" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Module 19 Completion</span><span class="item-sub" id="hint_mod19"></span></div>
+          <div class="item-weight">0.48%</div>
+          <input type="number" id="mod19" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Module 20 Completion</span><span class="item-sub" id="hint_mod20"></span></div>
+          <div class="item-weight">0.48%</div>
+          <input type="number" id="mod20" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Module 21 Completion</span><span class="item-sub" id="hint_mod21"></span></div>
+          <div class="item-weight">0.48%</div>
+          <input type="number" id="mod21" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+
+        <div class="row-item">
+          <div><span class="item-label">Unit 1–7 Checkpoint Avg</span><span class="item-sub">7 checkpoints combined</span></div>
+          <div class="item-weight">4.38%</div>
+          <input type="number" id="cp1_7" min="0" max="100" step="0.01" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Unit 8 Checkpoint</span><span class="item-sub" id="hint_cp8"></span></div>
+          <div class="item-weight">0.63%</div>
+          <input type="number" id="cp8" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+
+        <div class="row-item">
+          <div><span class="item-label">Unit 1–6 Completion Avg</span><span class="item-sub">6 unit completions combined</span></div>
+          <div class="item-weight">3.75%</div>
+          <input type="number" id="uc1_6" min="0" max="100" step="0.01" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Unit 7 Completion</span><span class="item-sub" id="hint_uc7"></span></div>
+          <div class="item-weight">0.63%</div>
+          <input type="number" id="uc7" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Unit 8 Completion</span><span class="item-sub" id="hint_uc8"></span></div>
+          <div class="item-weight">0.63%</div>
+          <input type="number" id="uc8" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+
+        <div class="row-item">
+          <div><span class="item-label">Discussion</span><span class="item-sub">High-impact single category</span></div>
+          <div class="item-weight">20.00%</div>
+          <input type="number" id="discussion" min="0" max="100" step="0.01" oninput="recalc()" />
+        </div>
+      </div>
+
+      <!-- EXAMS -->
+      <div class="card">
+        <div class="card-header">
+          <h2>2. Regular Exams & Cumulative Final</h2>
+          <span class="badge-weight">60% of Course Grade</span>
+        </div>
+        <details class="descriptor">
+          <summary>How Exam Ranking & Option 1 vs. Option 2 Work</summary>
+          <p>
+            Your 3 regular exams (45% total) are automatically sorted from highest to lowest: your <strong>highest exam counts 20%</strong>, your <strong>middle exam counts 15%</strong>, and your <strong>lowest exam counts 10%</strong>. For the remaining 15%, <strong>Option 1</strong> uses your Cumulative Final Exam score, whereas <strong>Option 2</strong> replaces the Final Exam with your raw unweighted average across Exams 1–3.
+          </p>
+        </details>
+
+        <div class="row-item">
+          <div><span class="item-label">Exam 1</span><span class="item-sub" id="hint_ex1"></span></div>
+          <div class="item-weight">Auto-ranked</div>
+          <input type="number" id="exam1" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Exam 2</span><span class="item-sub" id="hint_ex2"></span></div>
+          <div class="item-weight">Auto-ranked</div>
+          <input type="number" id="exam2" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Exam 3</span><span class="item-sub" id="hint_ex3"></span></div>
+          <div class="item-weight">Auto-ranked</div>
+          <input type="number" id="exam3" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+        <div class="row-item">
+          <div><span class="item-label">Cumulative Final Exam</span><span class="item-sub" id="hint_final"></span></div>
+          <div class="item-weight">15.00% (Opt 1)</div>
+          <input type="number" id="finalExam" min="0" max="100" step="0.01" placeholder="Auto" oninput="recalc()" />
+        </div>
+
+        <div class="exam-rank-box">
+          <strong>Live Exam Ranking & Raw Average:</strong>
+          <div class="rank-pills" id="rankPills"></div>
+        </div>
+      </div>
+
+      <!-- BONUS POINTS -->
+      <div class="card">
+        <div class="card-header">
+          <h2>3. Bonus Opportunities</h2>
+          <span class="badge-weight">Up to +1.20% Direct Boost</span>
+        </div>
+        <details class="descriptor">
+          <summary>How Bonus Points Add to Your Grade</summary>
+          <p>
+            Bonus items add directly onto your final course percentage in both Option 1 and Option 2. Completing the Pre-Survey or Post-Survey earns <strong>+0.50%</strong> each (5 pts × 10% weight), and each Unit Climate/Energy bonus earns <strong>+0.05%</strong> (1 pt × 5% weight).
+          </p>
+        </details>
+
+        <div class="bonus-grid">
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_pre" onchange="recalc()" /> Pre-Survey Bonus (5 pts)</span>
+            <span class="bonus-pts">+0.50%</span>
+          </label>
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_post" onchange="recalc()" /> Post-Survey Bonus (5 pts)</span>
+            <span class="bonus-pts">+0.50%</span>
+          </label>
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_u1" onchange="recalc()" /> Unit 1: Modeling Uncertainty in a Changing Climate</span>
+            <span class="bonus-pts">+0.05%</span>
+          </label>
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_u4" onchange="recalc()" /> Unit 4: Decoding the Mystery of Greenhouse Molecules</span>
+            <span class="bonus-pts">+0.05%</span>
+          </label>
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_u6" onchange="recalc()" /> Unit 6: Driving Down Greenhouse Emissions</span>
+            <span class="bonus-pts">+0.05%</span>
+          </label>
+          <label class="bonus-item">
+            <span class="bonus-left"><input type="checkbox" id="b_u8" onchange="recalc()" /> Unit 8: What’s Our Next Big Energy Source?</span>
+            <span class="bonus-pts">+0.05%</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: RESULTS & STUDENT GUIDANCE -->
+    <div class="sticky-col">
+      <div class="card">
+        <div class="card-header">
+          <h2>Projected Final Grade</h2>
+          <span class="badge-weight">Live Comparison</span>
+        </div>
+
+        <div class="options-compare">
+          <div class="option-box" id="boxOpt1">
+            <div class="opt-title">Option 1: With Final</div>
+            <div class="opt-score" id="opt1Score">--%</div>
+            <div class="opt-letter" id="opt1Letter">-</div>
+          </div>
+          <div class="option-box" id="boxOpt2">
+            <div class="opt-title">Option 2: Exam Avg</div>
+            <div class="opt-score" id="opt2Score">--%</div>
+            <div class="opt-letter" id="opt2Letter">-</div>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-row"><span>Coursework Contribution (40% max):</span><strong id="outCw">--</strong></div>
+          <div class="breakdown-row"><span>Ranked Regular Exams (45% max):</span><strong id="outEx">--</strong></div>
+          <div class="breakdown-row"><span>Final Exam / Replacement (15% max):</span><strong id="outFin">--</strong></div>
+          <div class="breakdown-row"><span>Total Bonus Points Earned:</span><strong id="outBonus" style="color:var(--accent)">--</strong></div>
+        </div>
+
+        <div class="target-solver">
+          <div class="target-controls">
+            <span>What Final Exam score do I need for:</span>
+            <select id="targetGrade" onchange="recalc()">
+              <option value="90">A (90%)</option>
+              <option value="80">B (80%)</option>
+              <option value="70">C (70%)</option>
+              <option value="60">D (60%)</option>
+            </select>
+          </div>
+          <div id="targetResult"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Personalized Student Guidance</h2>
+        </div>
+        <div id="guidanceContainer"></div>
+        <p class="disclaimer">This tool provides an unofficial projection based on your entered scores. Always verify official grades in Blackboard.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const DEFAULTS = {
+    mod1_18: 95, mod19: "", mod20: "", mod21: "",
+    cp1_7: 79.85, cp8: "",
+    uc1_6: 90, uc7: "", uc8: "",
+    discussion: 77.15,
+    exam1: 83, exam2: 74, exam3: 86, finalExam: "",
+    b_pre: true, b_post: true, b_u1: true, b_u4: true, b_u6: true, b_u8: true
+  };
+
+  function getNum(id) {
+    const val = document.getElementById(id).value.trim();
+    if (val === "") return null;
+    const n = parseFloat(val);
+    return isNaN(n) ? null : Math.max(0, Math.min(100, n));
+  }
+
+  function toLetter(score) {
+    if (score >= 90) return "A";
+    if (score >= 80) return "B";
+    if (score >= 70) return "C";
+    if (score >= 60) return "D";
+    return "F";
+  }
+
+  function resolveField(id, fallback, hintId) {
+    const el = document.getElementById(id);
+    const hintEl = document.getElementById(hintId);
+    const val = getNum(id);
+    if (val === null) {
+      el.classList.add("is-auto");
+      if (hintEl) hintEl.textContent = `Auto-estimated at ${fallback.toFixed(2)}%`;
+      return fallback;
+    } else {
+      el.classList.remove("is-auto");
+      if (hintEl) hintEl.textContent = "Entered score";
+      return val;
+    }
+  }
+
+  function recalc() {
+    // Coursework
+    const m1_18 = getNum("mod1_18") ?? 0;
+    const m19 = resolveField("mod19", m1_18, "hint_mod19");
+    const m20 = resolveField("mod20", m1_18, "hint_mod20");
+    const m21 = resolveField("mod21", m1_18, "hint_mod21");
+
+    const cp1_7 = getNum("cp1_7") ?? 0;
+    const cp8 = resolveField("cp8", cp1_7, "hint_cp8");
+
+    const uc1_6 = getNum("uc1_6") ?? 0;
+    const uc7 = resolveField("uc7", uc1_6, "hint_uc7");
+    const uc8 = resolveField("uc8", uc1_6, "hint_uc8");
+
+    const disc = getNum("discussion") ?? 0;
+
+    const cwWeighted =
+      m1_18 * (18 / 210) +
+      (m19 + m20 + m21) * (1 / 210) +
+      cp1_7 * 0.04375 +
+      cp8 * 0.00625 +
+      uc1_6 * 0.0375 +
+      (uc7 + uc8) * 0.00625 +
+      disc * 0.20;
+
+    // Regular Exams
+    const enteredExams = [getNum("exam1"), getNum("exam2"), getNum("exam3")].filter(v => v !== null);
+    const fallbackExam = enteredExams.length > 0
+      ? enteredExams.reduce((a, b) => a + b, 0) / enteredExams.length
+      : 0;
+
+    const e1 = resolveField("exam1", fallbackExam, "hint_ex1");
+    const e2 = resolveField("exam2", fallbackExam, "hint_ex2");
+    const e3 = resolveField("exam3", fallbackExam, "hint_ex3");
+
+    const sortedExams = [
+      { name: "Exam 1", score: e1 },
+      { name: "Exam 2", score: e2 },
+      { name: "Exam 3", score: e3 }
+    ].sort((a, b) => b.score - a.score);
+
+    const rankedExamPts =
+      sortedExams[0].score * 0.20 +
+      sortedExams[1].score * 0.15 +
+      sortedExams[2].score * 0.10;
+
+    const rawExamAvg = (e1 + e2 + e3) / 3;
+    const finalScore = resolveField("finalExam", rawExamAvg, "hint_final");
+
+    // Bonus
+    const bonusPts =
+      (document.getElementById("b_pre").checked ? 0.50 : 0) +
+      (document.getElementById("b_post").checked ? 0.50 : 0) +
+      (document.getElementById("b_u1").checked ? 0.05 : 0) +
+      (document.getElementById("b_u4").checked ? 0.05 : 0) +
+      (document.getElementById("b_u6").checked ? 0.05 : 0) +
+      (document.getElementById("b_u8").checked ? 0.05 : 0);
+
+    // Options
+    const opt1 = cwWeighted + rankedExamPts + finalScore * 0.15 + bonusPts;
+    const opt2 = cwWeighted + rankedExamPts + rawExamAvg * 0.15 + bonusPts;
+
+    // Render Pills
+    document.getElementById("rankPills").innerHTML = `
+      <span class="pill">Highest (20%): <strong>${sortedExams[0].name} (${sortedExams[0].score.toFixed(1)}%)</strong></span>
+      <span class="pill">Middle (15%): <strong>${sortedExams[1].name} (${sortedExams[1].score.toFixed(1)}%)</strong></span>
+      <span class="pill">Lowest (10%): <strong>${sortedExams[2].name} (${sortedExams[2].score.toFixed(1)}%)</strong></span>
+      <span class="pill">Raw Avg (Opt 2): <strong>${rawExamAvg.toFixed(2)}%</strong></span>
+    `;
+
+    // Render Results
+    document.getElementById("opt1Score").textContent = opt1.toFixed(2) + "%";
+    document.getElementById("opt1Letter").textContent = toLetter(opt1);
+    document.getElementById("opt2Score").textContent = opt2.toFixed(2) + "%";
+    document.getElementById("opt2Letter").textContent = toLetter(opt2);
+
+    document.getElementById("boxOpt1").classList.toggle("winner", opt1 > opt2);
+    document.getElementById("boxOpt2").classList.toggle("winner", opt2 >= opt1);
+
+    document.getElementById("outCw").textContent = `${cwWeighted.toFixed(2)} / 40.00%`;
+    document.getElementById("outEx").textContent = `${rankedExamPts.toFixed(2)} / 45.00%`;
+    document.getElementById("outFin").textContent = `${(finalScore * 0.15).toFixed(2)}% (Opt 1) | ${(rawExamAvg * 0.15).toFixed(2)}% (Opt 2)`;
+    document.getElementById("outBonus").textContent = `+${bonusPts.toFixed(2)}%`;
+
+    // Target Solver
+    const target = parseFloat(document.getElementById("targetGrade").value);
+    const baseWithoutFinal = cwWeighted + rankedExamPts + bonusPts;
+    const neededFinal = (target - baseWithoutFinal) / 0.15;
+    const targetEl = document.getElementById("targetResult");
+
+    if (opt2 >= target) {
+      targetEl.innerHTML = `You already reach <strong>${target}%</strong> under <strong>Option 2</strong> (${opt2.toFixed(2)}%) without needing the Cumulative Final to raise your grade.`;
+    } else if (neededFinal <= 0) {
+      targetEl.innerHTML = `You have already locked in at least <strong>${target}%</strong> regardless of your Final Exam score.`;
+    } else if (neededFinal > 100) {
+      targetEl.innerHTML = `Reaching <strong>${target}%</strong> via Option 1 requires <strong>${neededFinal.toFixed(1)}%</strong> on the Final (above 100%). Focus on maximizing remaining coursework and bonus points.`;
+    } else {
+      targetEl.innerHTML = `You need at least <strong>${neededFinal.toFixed(1)}%</strong> on the Cumulative Final Exam (Option 1) to finish with <strong>${target}%</strong>.`;
+    }
+
+    // Guidance Engine
+    const tips = [];
+    const finalEntered = getNum("finalExam") !== null;
+
+    if (!finalEntered) {
+      tips.push({
+        type: "info",
+        title: "Should you take the Cumulative Final Exam?",
+        body: `Right now, Option 2 (replacing the final with your ${rawExamAvg.toFixed(2)}% raw exam average) gives you ${opt2.toFixed(2)}% (${toLetter(opt2)}). Taking the Final Exam will only improve your grade if you score higher than ${rawExamAvg.toFixed(1)}%.`
+      });
+    } else if (opt1 > opt2) {
+      tips.push({
+        type: "info",
+        title: "Option 1 Boosts Your Grade",
+        body: `Your Final Exam score (${finalScore.toFixed(1)}%) beats your regular exam average (${rawExamAvg.toFixed(2)}%), lifting your overall grade by +${(opt1 - opt2).toFixed(2)}%.`
+      });
+    }
+
+    if (bonusPts < 1.20) {
+      tips.push({
+        type: "warn",
+        title: `Unclaimed Bonus Points (+${(1.20 - bonusPts).toFixed(2)}% Available)`,
+        body: "You still have unchecked survey or unit climate/energy bonus items. Because bonus points add directly to your final percentage, completing them is the easiest way to cross a letter-grade boundary."
+      });
+    }
+
+    if (disc < 80) {
+      tips.push({
+        type: "warn",
+        title: "High-Leverage Category: Discussion (20% Weight)",
+        body: `Your Discussion score (${disc.toFixed(1)}%) carries the same weight as your highest regular exam (20%). Completing any remaining discussion posts or rubric requirements can substantially raise both Option 1 and Option 2.`
+      });
+    }
+
+    document.getElementById("guidanceContainer").innerHTML = tips.map(t => `
+      <div class="guidance-card ${t.type === "warn" ? "warn" : ""}">
+        <strong>${t.title}</strong>
+        <span>${t.body}</span>
+      </div>
+    `).join("");
+
+    saveState();
+  }
+
+  function saveState() {
+    const state = {};
+    Object.keys(DEFAULTS).forEach(k => {
+      const el = document.getElementById(k);
+      state[k] = el.type === "checkbox" ? el.checked : el.value;
+    });
+    try { localStorage.setItem("chem101_calc_v1", JSON.stringify(state)); } catch (e) {}
+  }
+
+  function loadState() {
+    let state = DEFAULTS;
+    try {
+      const saved = localStorage.getItem("chem101_calc_v1");
+      if (saved) state = { ...DEFAULTS, ...JSON.parse(saved) };
+    } catch (e) {}
+
+    Object.keys(DEFAULTS).forEach(k => {
+      const el = document.getElementById(k);
+      if (el.type === "checkbox") el.checked = Boolean(state[k]);
+      else el.value = state[k];
+    });
+    recalc();
+  }
+
+  function resetDefaults() {
+    try { localStorage.removeItem("chem101_calc_v1"); } catch (e) {}
+    loadState();
+  }
+
+  loadState();
+</script>
+</body>
+</html>
